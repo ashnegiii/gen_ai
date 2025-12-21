@@ -54,7 +54,13 @@ Then, update `requirements.txt` automatically with:
 pip freeze > requirements.txt
 ```
 
-## 6. Architecture Overview
+## 6. Environment Variables
+
+I have added a `.env.example` file to document the required environment variables.
+Please create a local `.env` file in the backend/ directory based on this example and populate it with the appropriate values.
+Make sure to inform the team when new environment variables are added (e.g. database configuration).
+
+## 7. Architecture Overview
 
 ### 1. Define Database schema (Kevin):
 
