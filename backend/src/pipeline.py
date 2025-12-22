@@ -16,10 +16,9 @@ class RAGPipeline:
         self.retrieval_service = RetrievalService()
         self.generation_service = GenerationService()
 
-    def index_document(self):
-        # Kevin: Index the uploaded document
-
-        pass
+    def index_document(self, documents):
+        """Index documents into the vector database."""
+        return self.indexing_service.index_documents(documents)
 
     def query(self):
         # Step 1 (Kevin): Optimize the user's query for better retrieval

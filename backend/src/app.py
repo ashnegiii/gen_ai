@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 
 from services.generation_service import GenerationService
 from services.indexing_service import IndexingService
@@ -15,11 +15,20 @@ generation_service = GenerationService()
 
 
 @app.route("/api/upload", methods=["POST"])
-def test():
+def upload():
     """
     Upload and index documents using (optionally) chunking strategies.
     """
-    pass
+    try:
+        data = request.get_json()
+        documents = data.get("documents", [])
+        
+        result = indexing_service.index_documents(documents)
+        
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 
 
 @app.route('/api/query', methods=["POST"])

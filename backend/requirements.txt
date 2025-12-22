@@ -10,3 +10,8 @@ MarkupSafe==3.0.3
 packaging==25.0
 python-dotenv==1.2.1
 Werkzeug==3.1.4
+psycopg[binary]>=3.1.0
+numpy>=1.26.0
+sentence-transformers>=2.3.0
+pgvector==0.2.4
+huggingface_hub>=0.20.0
