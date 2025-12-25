@@ -97,7 +97,7 @@ def chat_test():
     def generate():
         # Example streamed answer
         answer = (
-            f"""Your query was: {query}. I'm sorry you're having trouble receiving the password reset email. This issue is usually caused by one of the following reasons:
+            f"""Your query was: {query}. \nI'm sorry you're having trouble receiving the password reset email. This issue is usually caused by one of the following reasons:
 First, please double-check that the email address you entered is the one associated with your account. Even a small typo can prevent the email from being delivered.
 If the address is correct, make sure that emails from our domain are not being blocked by your email provider. Adding our support address to your contacts or allowlist can help.
 In some cases, corporate or university email systems automatically filter automated emails. If possible, try using a personal email address instead.

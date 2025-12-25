@@ -15,7 +15,17 @@ interface Message {
 }
 
 export default function Chat() {
-	const [messages, setMessages] = useState<Message[]>([]);
+	const [messages, setMessages] = useState<Message[]>([
+		{
+			id: 'welcome',
+			role: 'assistant',
+			content: '',
+			timestamp: new Date().toLocaleTimeString('en-US', {
+				hour: '2-digit',
+				minute: '2-digit',
+			}),
+		},
+	]);
 
 	const [input, setInput] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +38,32 @@ export default function Chat() {
 	useEffect(() => {
 		scrollToBottom();
 	}, [messages]);
+
+	useEffect(() => {
+		const welcomeText =
+			'Hey! I am your AI assistant. I can help you answer questions based on your uploaded documents. Feel free to ask me anything.';
+
+		let index = 0;
+
+		const interval = setInterval(() => {
+			setMessages((prev) => {
+				const updated = [...prev];
+				updated[0] = {
+					...updated[0],
+					content: welcomeText.slice(0, index + 1),
+				};
+				return updated;
+			});
+
+			index++;
+
+			if (index >= welcomeText.length) {
+				clearInterval(interval);
+			}
+		}, 5); // typing speed type shi
+
+		return () => clearInterval(interval);
+	}, []);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -144,9 +180,9 @@ export default function Chat() {
 			<main className='flex-1 overflow-hidden flex flex-col'>
 				<div className='container mx-auto px-4 flex-1 flex flex-col max-w-4xl overflow-hidden'>
 					<div className='flex-1 overflow-y-auto py-8 space-y-6'>
-						{messages.map((message) => (
+						{messages.map((message, i) => (
 							<div
-								key={message.id}
+								key={i}
 								className={`flex gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
 							>
 								{message.role === 'assistant' && (
@@ -184,7 +220,6 @@ export default function Chat() {
 								onKeyDown={handleKeyDown}
 								placeholder='Ask a question about your documents...'
 								className='min-h-15 max-h-50 resize-none'
-								disabled={isLoading}
 							/>
 							<Button
 								type='submit'
