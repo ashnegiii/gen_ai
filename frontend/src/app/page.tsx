@@ -86,9 +86,6 @@ export default function Home() {
 		} catch (error) {
 			toast.error('Delete failed', {
 				description: 'Failed to delete document. Please try again.',
-				action: {
-					type,
-				},
 			});
 		} finally {
 			setDeletingId(null);
