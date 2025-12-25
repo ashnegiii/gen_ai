@@ -6,15 +6,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class IndexingService:
     """Service for indexing FAQ documents into the vector database."""
-    
+
     def __init__(self, db_config: Optional[Dict] = None):
         """Initialize the IndexingService with database configuration."""
         if db_config is None:
             db_config = {
                 "host": os.getenv("POSTGRES_HOST", "localhost"),
-                "port": os.getenv("POSTGRES_PORT", "5432"),
+                "port": os.getenv("POSTGRES_PORT", "5433"),
                 "database": os.getenv("POSTGRES_DB", "gen_ai"),
                 "user": os.getenv("POSTGRES_USER", "postgres"),
                 "password": os.getenv("POSTGRES_PASSWORD", "postgres"),
@@ -62,9 +63,11 @@ class IndexingService:
         try:
             from sentence_transformers import SentenceTransformer
             model = SentenceTransformer(model_name)
-            embs = model.encode(texts, convert_to_numpy=True).astype(np.float32)
+            embs = model.encode(
+                texts, convert_to_numpy=True).astype(np.float32)
         except Exception as e:
-            print(f"Warning: Could not load SentenceTransformer model. Using random embeddings. Error: {e}")
+            print(
+                f"Warning: Could not load SentenceTransformer model. Using random embeddings. Error: {e}")
             # Fallback: deterministic random vectors
             rng = np.random.RandomState(42)
             dim = 384
@@ -77,7 +80,7 @@ class IndexingService:
     def index_documents(self, documents: List[Dict]) -> Dict[str, any]:
         """
         Index documents with FAQs into the database.
-        
+
         Expected format:
         [
             {
@@ -87,12 +90,12 @@ class IndexingService:
                 ]
             }
         ]
-        
+
         Returns:
             Dict with status and count of indexed FAQs
         """
         self._ensure_connection()
-        
+
         # Flatten all FAQs from all documents
         all_faqs = []
         for doc in documents:
@@ -101,17 +104,17 @@ class IndexingService:
                     "question_text": faq["question"],
                     "answer_text": faq["answer"]
                 })
-        
+
         if not all_faqs:
             return {"status": "success", "indexed_count": 0, "message": "No FAQs to index"}
-        
+
         # Compute embeddings
         q_texts = [f["question_text"] for f in all_faqs]
         a_texts = [f["answer_text"] for f in all_faqs]
-        
+
         q_embs = self._texts_to_embeddings(q_texts)
         a_embs = self._texts_to_embeddings(a_texts)
-        
+
         # Insert into database
         cur = self.conn.cursor()
         for faq, q_emb, a_emb in zip(all_faqs, q_embs, a_embs):
@@ -119,9 +122,9 @@ class IndexingService:
                 INSERT INTO faqs (question_text, answer_text, question_embedding, answer_embedding)
                 VALUES (%s, %s, %s, %s)
             """, (faq["question_text"], faq["answer_text"], q_emb.tolist(), a_emb.tolist()))
-        
+
         self.conn.commit()
-        
+
         return {
             "status": "success",
             "indexed_count": len(all_faqs),
