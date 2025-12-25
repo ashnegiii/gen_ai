@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { Bot, Loader2, Send, User } from 'lucide-react';
+import { Loader2, Send, Sparkles, User } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -151,7 +151,7 @@ export default function Chat() {
 							>
 								{message.role === 'assistant' && (
 									<div className='shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center'>
-										<Bot className='h-4 w-4' />
+										<Sparkles className='h-4 w-4' />
 									</div>
 								)}
 								<Card className='px-4 py-3 gap-2 max-w-[80%]'>
