@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: 'Chadoc - Document Chat AI',
+	title: 'Chadoc - Document Chat AI for customer service (CS) use cases',
 	description: 'Chat with your documents using AI',
 };
 

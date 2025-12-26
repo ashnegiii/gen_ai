@@ -121,7 +121,7 @@ export default function Home() {
 				<div className='max-w-4xl mx-auto space-y-8'>
 					<div>
 						<h2 className='text-3xl font-semibold mb-2'>Document Management</h2>
-						<p className='text-muted-foreground'>Upload and manage your documents for RAG-powered chat</p>
+						<p className='text-muted-foreground'>Upload and manage your documents for RAG-powered chat for customer service (CS) use cases</p>
 					</div>
 					<Card>
 						<CardHeader>
