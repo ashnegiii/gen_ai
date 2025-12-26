@@ -6,6 +6,7 @@ from services.generation_service import GenerationService
 from services.indexing_service import IndexingService
 from services.retrieval_service import RetrievalService
 from flask_cors import CORS
+from pipeline import RAGPipeline
 
 
 app = Flask(__name__)
@@ -33,7 +34,7 @@ def upload():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.route('/api/query', methods=["POST"])
+#@app.route('/api/query', methods=["POST"])
 def chat():
     """
     Main RAG endpoint.
@@ -44,7 +45,6 @@ def chat():
     2. Paula: Retrieve relevant documents
     3. Moritz: Prompt engineering and LLM generation
     """
-    pass
 
 
 # TODO kevin: can you implement document listing?
@@ -93,6 +93,9 @@ def chat_test():
 
     data = request.get_json()
     query = data.get("query", "")
+
+    rag_pipeline = RAGPipeline()
+    rag_pipeline.query(query)
 
     def generate():
         # Example streamed answer
