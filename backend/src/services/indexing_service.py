@@ -15,7 +15,7 @@ class IndexingService:
         if db_config is None:
             db_config = {
                 "host": os.getenv("POSTGRES_HOST", "localhost"),
-                "port": os.getenv("POSTGRES_PORT", "5433"),
+                "port": os.getenv("POSTGRES_PORT", "5432"),
                 "database": os.getenv("POSTGRES_DB", "gen_ai"),
                 "user": os.getenv("POSTGRES_USER", "postgres"),
                 "password": os.getenv("POSTGRES_PASSWORD", "postgres"),
