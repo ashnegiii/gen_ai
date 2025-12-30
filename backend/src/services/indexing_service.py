@@ -36,9 +36,22 @@ class IndexingService:
         """Create necessary tables and indexes if they don't exist."""
         cur = self.conn.cursor()
         cur.execute("CREATE EXTENSION IF NOT EXISTS vector;")
+        
+        # Documents table - tracks uploaded files
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS documents (
+              id SERIAL PRIMARY KEY,
+              name TEXT NOT NULL,
+              size_bytes INTEGER NOT NULL DEFAULT 0,
+              created_at TIMESTAMPTZ DEFAULT now()
+            );
+        """)
+        
+        # FAQs table - with foreign key to documents
         cur.execute("""
             CREATE TABLE IF NOT EXISTS faqs (
               id SERIAL PRIMARY KEY,
+              document_id INTEGER REFERENCES documents(id) ON DELETE CASCADE,
               question_text TEXT NOT NULL,
               answer_text TEXT NOT NULL,
               question_embedding vector(384) NOT NULL,
@@ -55,6 +68,10 @@ class IndexingService:
             CREATE INDEX IF NOT EXISTS faqs_aemb_idx 
             ON faqs USING ivfflat (answer_embedding vector_cosine_ops) 
             WITH (lists = 100);
+        """)
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS faqs_document_id_idx 
+            ON faqs (document_id);
         """)
         self.conn.commit()
 
@@ -115,13 +132,16 @@ class IndexingService:
         q_embs = self._texts_to_embeddings(q_texts)
         a_embs = self._texts_to_embeddings(a_texts)
 
-        # Insert into database
+        # Insert into database using executemany for better performance
         cur = self.conn.cursor()
-        for faq, q_emb, a_emb in zip(all_faqs, q_embs, a_embs):
-            cur.execute("""
-                INSERT INTO faqs (question_text, answer_text, question_embedding, answer_embedding)
-                VALUES (%s, %s, %s, %s)
-            """, (faq["question_text"], faq["answer_text"], q_emb.tolist(), a_emb.tolist()))
+        insert_data = [
+            (faq["question_text"], faq["answer_text"], q_emb.tolist(), a_emb.tolist())
+            for faq, q_emb, a_emb in zip(all_faqs, q_embs, a_embs)
+        ]
+        cur.executemany("""
+            INSERT INTO faqs (question_text, answer_text, question_embedding, answer_embedding)
+            VALUES (%s, %s, %s, %s)
+        """, insert_data)
 
         self.conn.commit()
 
@@ -138,6 +158,177 @@ class IndexingService:
         cur.execute("SELECT COUNT(*) FROM faqs")
         total = cur.fetchone()[0]
         return {"total_faqs": total}
+
+    def get_all_documents(self) -> List[Dict]:
+        """
+        Get all uploaded documents (files) from the database.
+        
+        Returns:
+            List of documents with id, name, uploadedAt, and size
+        """
+        self._ensure_connection()
+        cur = self.conn.cursor()
+        cur.execute("""
+            SELECT id, name, size_bytes, created_at 
+            FROM documents 
+            ORDER BY created_at DESC
+        """)
+        rows = cur.fetchall()
+        
+        documents = []
+        for row in rows:
+            doc_id, name, size_bytes, created_at = row
+            # Format size
+            if size_bytes < 1024:
+                size_str = f"{size_bytes} B"
+            else:
+                size_str = f"{size_bytes / 1024:.1f} KB"
+            
+            documents.append({
+                "id": str(doc_id),
+                "name": name,
+                "uploadedAt": created_at.isoformat() if created_at else "",
+                "size": size_str
+            })
+        
+        return documents
+
+    def delete_document(self, doc_id: str) -> Dict[str, any]:
+        """
+        Delete a document and all its associated FAQs by document ID.
+        
+        Args:
+            doc_id: The ID of the document to delete
+            
+        Returns:
+            Dict with status and message
+        """
+        self._ensure_connection()
+        cur = self.conn.cursor()
+        
+        # Check if document exists
+        cur.execute("SELECT id, name FROM documents WHERE id = %s", (int(doc_id),))
+        doc = cur.fetchone()
+        if doc is None:
+            return {
+                "status": "error",
+                "message": f"Document with id {doc_id} not found"
+            }
+        
+        doc_name = doc[1]
+        
+        # Count FAQs that will be deleted
+        cur.execute("SELECT COUNT(*) FROM faqs WHERE document_id = %s", (int(doc_id),))
+        faq_count = cur.fetchone()[0]
+        
+        # Delete the document (FAQs will be cascade deleted)
+        cur.execute("DELETE FROM documents WHERE id = %s", (int(doc_id),))
+        self.conn.commit()
+        
+        return {
+            "status": "success",
+            "message": f"Document '{doc_name}' with {faq_count} FAQ(s) deleted successfully",
+            "id": doc_id
+        }
+
+    def clear_all_documents(self) -> Dict[str, any]:
+        """
+        Delete all documents and FAQs from the database.
+        
+        Returns:
+            Dict with status and count of deleted documents
+        """
+        self._ensure_connection()
+        cur = self.conn.cursor()
+        
+        # Get counts before deletion
+        cur.execute("SELECT COUNT(*) FROM documents")
+        doc_count = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM faqs")
+        faq_count = cur.fetchone()[0]
+        
+        # Delete all (FAQs will cascade)
+        cur.execute("DELETE FROM documents")
+        # Also delete any orphaned FAQs (from old schema)
+        cur.execute("DELETE FROM faqs")
+        self.conn.commit()
+        
+        return {
+            "status": "success",
+            "message": f"Deleted {doc_count} document(s) with {faq_count} FAQ(s) from database",
+            "deleted_documents": doc_count,
+            "deleted_faqs": faq_count
+        }
+
+    def index_from_csv(self, csv_content: str, filename: str = "uploaded.csv") -> Dict[str, any]:
+        """
+        Index FAQs from CSV content, creating a document entry to group them.
+        
+        Expected CSV format:
+        question,answer
+        "How do I...?","You can..."
+        
+        Args:
+            csv_content: CSV string with question,answer columns
+            filename: Name of the uploaded file
+            
+        Returns:
+            Dict with status and count of indexed FAQs
+        """
+        import csv
+        import io
+        
+        self._ensure_connection()
+        
+        # Parse CSV
+        reader = csv.DictReader(io.StringIO(csv_content))
+        all_faqs = []
+        for row in reader:
+            all_faqs.append({
+                "question_text": row["question"],
+                "answer_text": row["answer"]
+            })
+        
+        if not all_faqs:
+            return {"status": "success", "indexed_count": 0, "message": "No FAQs to index"}
+        
+        # Calculate file size
+        size_bytes = len(csv_content.encode('utf-8'))
+        
+        # Create document entry
+        cur = self.conn.cursor()
+        cur.execute("""
+            INSERT INTO documents (name, size_bytes)
+            VALUES (%s, %s)
+            RETURNING id
+        """, (filename, size_bytes))
+        document_id = cur.fetchone()[0]
+        
+        # Compute embeddings
+        q_texts = [f["question_text"] for f in all_faqs]
+        a_texts = [f["answer_text"] for f in all_faqs]
+        
+        q_embs = self._texts_to_embeddings(q_texts)
+        a_embs = self._texts_to_embeddings(a_texts)
+        
+        # Insert FAQs with document_id using executemany for better performance
+        insert_data = [
+            (document_id, faq["question_text"], faq["answer_text"], q_emb.tolist(), a_emb.tolist())
+            for faq, q_emb, a_emb in zip(all_faqs, q_embs, a_embs)
+        ]
+        cur.executemany("""
+            INSERT INTO faqs (document_id, question_text, answer_text, question_embedding, answer_embedding)
+            VALUES (%s, %s, %s, %s, %s)
+        """, insert_data)
+        
+        self.conn.commit()
+        
+        return {
+            "status": "success",
+            "indexed_count": len(all_faqs),
+            "document_id": document_id,
+            "message": f"Successfully indexed {len(all_faqs)} FAQs from '{filename}'"
+        }
 
     def close(self):
         """Close database connection."""
