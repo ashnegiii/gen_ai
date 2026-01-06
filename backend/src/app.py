@@ -67,7 +67,7 @@ def upload():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-#@app.route('/api/query', methods=["POST"])
+@app.route('/api/query', methods=["POST"])
 def chat():
     """
     Main RAG endpoint.
