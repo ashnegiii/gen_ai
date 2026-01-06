@@ -47,40 +47,43 @@ def chat():
     pass
 
 
-# TODO kevin: can you implement document listing?
 @app.route("/api/documents", methods=["GET"])
 def list_documents():
     """
     List all indexed documents.
-    (Stub version – no DB yet)
+    Returns documents with id, name, uploadedAt, and size.
     """
-    return jsonify({"documents": []}), 200
+    try:
+        documents = indexing_service.get_all_documents()
+        return jsonify({"documents": documents}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
-# TODO kevin: can you implement document deletion by id?
 @app.route("/api/documents", methods=["DELETE"])
 def delete_document():
     """
     Delete a document by ID.
-    (Stub version – no DB yet)
+    Expects JSON body with 'id' field.
     """
+    try:
+        data = request.get_json()
+        doc_id = data.get("id")
 
-    data = request.get_json()
-    doc_id = data.get("id")
+        if not doc_id:
+            return jsonify({
+                "status": "error",
+                "message": "Document id is required"
+            }), 400
 
-    if not doc_id:
-        return jsonify({
-            "status": "error",
-            "message": "Document id is required"
-        }), 400
-
-    # TODO: delete from DB / filesystem / index
-    print(f"Deleting document with id: {doc_id}")
-
-    return jsonify({
-        "status": "success",
-        "id": doc_id
-    }), 200
+        result = indexing_service.delete_document(doc_id)
+        
+        if result["status"] == "error":
+            return jsonify(result), 404
+        
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 # NOTE: only for testing streaming responses (delete when llm streaming is implemented)
