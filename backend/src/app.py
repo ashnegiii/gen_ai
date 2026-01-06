@@ -1,12 +1,13 @@
+import csv
+import io
 import time
 
-from flask import Flask, Response, request, jsonify
-
-from services.generation_service import GenerationService
-from services.indexing_service import IndexingService
-from services.retrieval_service import RetrievalService
+from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 
+from .services.generation_service import GenerationService
+from .services.indexing_service import IndexingService
+from .services.retrieval_service import RetrievalService
 
 app = Flask(__name__)
 CORS(app)
@@ -23,12 +24,44 @@ def upload():
     Upload and index documents using (optionally) chunking strategies.
     """
     try:
-        data = request.get_json()
-        documents = data.get("documents", [])
+        if 'file' not in request.files:
+            return jsonify({"status": "error", "message": "No file found"}), 400
+        
+        # get file from request
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"status": "error", "message": "No file selected"}), 400
+        
+        # read file content
+        file_content = file.read()
+        file_size = len(file_content)
+        filename = file.filename
 
-        result = indexing_service.index_documents(documents)
+        stream = io.StringIO(file_content.decode("UTF-8"), newline=None)
+        csv_input = csv.DictReader(stream)
+        
+        faq_entries = []
+        for row in csv_input:
+            q = row.get("question")
+            a = row.get("answer")
+            if q and a:
+                faq_entries.append({
+                    "question": q,
+                    "answer": a
+                })
+
+        if not faq_entries:
+            return jsonify({"status": "error", "message": "CSV is empty or incorrectly formatted"}), 400
+
+        # call indexing service
+        result = indexing_service.index_documents(
+            filename=filename,
+            file_size=file_size,
+            faq_entries=faq_entries
+        )
 
         return jsonify(result), 200
+
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 

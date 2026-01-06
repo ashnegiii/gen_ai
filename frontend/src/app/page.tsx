@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { FileText, Loader2, Trash2, Upload } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { toast } from 'sonner';
 
@@ -17,8 +17,28 @@ interface Document {
 
 export default function Home() {
 	const [documents, setDocuments] = useState<Document[]>([]);
+	const [loading, setLoading] = useState(true);
 	const [uploading, setUploading] = useState(false);
 	const [deletingId, setDeletingId] = useState<string | null>(null);
+
+
+	const fetchDocuments = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/documents');
+            if (!response.ok) throw new Error('Failed to fetch documents');
+            const data = await response.json();
+            setDocuments(data.documents);
+        } catch (error) {
+            console.error(error);
+            toast.error('Error', { description: 'Could not load documents from server.' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+	useEffect(() => {
+        fetchDocuments();
+    }, []);
 
 	const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];

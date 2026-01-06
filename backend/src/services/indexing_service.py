@@ -1,7 +1,8 @@
 import os
+from typing import Dict, List, Optional
+
 import numpy as np
 import psycopg
-from typing import List, Dict, Optional
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,7 +16,7 @@ class IndexingService:
         if db_config is None:
             db_config = {
                 "host": os.getenv("POSTGRES_HOST", "localhost"),
-                "port": os.getenv("POSTGRES_PORT", "5432"),
+                "port": os.getenv("POSTGRES_PORT", "5433"),
                 "database": os.getenv("POSTGRES_DB", "gen_ai"),
                 "user": os.getenv("POSTGRES_USER", "postgres"),
                 "password": os.getenv("POSTGRES_PASSWORD", "postgres"),
@@ -94,7 +95,7 @@ class IndexingService:
             embs = embs / norms
         return embs
 
-    def index_documents(self, documents: List[Dict]) -> Dict[str, any]:
+    def index_documents(self, filename: str, file_size: int, faq_entries: List[Dict]) -> Dict[str, any]:
         """
         Index documents with FAQs into the database.
 
@@ -113,43 +114,52 @@ class IndexingService:
         """
         self._ensure_connection()
 
+        if not faq_entries: 
+            return {"status": "success", "indexed_count": 0, "message": "Keine FAQs zum Indizieren"}
+
         # Flatten all FAQs from all documents
-        all_faqs = []
-        for doc in documents:
-            for faq in doc.get("faqs", []):
-                all_faqs.append({
-                    "question_text": faq["question"],
-                    "answer_text": faq["answer"]
-                })
+        try:
+            cur = self.conn.cursor()
+            
+            # 1. create document entry
+            cur.execute("""
+                INSERT INTO documents (name, size_bytes)
+                VALUES (%s, %s)
+                RETURNING id
+            """, (filename, file_size))
+            document_id = cur.fetchone()[0]
 
-        if not all_faqs:
-            return {"status": "success", "indexed_count": 0, "message": "No FAQs to index"}
+            # 2. compute embeddings    
+            q_texts = [f["question"] for f in faq_entries]
+            a_texts = [f["answer"] for f in faq_entries]
 
-        # Compute embeddings
-        q_texts = [f["question_text"] for f in all_faqs]
-        a_texts = [f["answer_text"] for f in all_faqs]
+            q_embs = self._texts_to_embeddings(q_texts)
+            a_embs = self._texts_to_embeddings(a_texts)
 
-        q_embs = self._texts_to_embeddings(q_texts)
-        a_embs = self._texts_to_embeddings(a_texts)
+            # 3. insert FAQs with document_id
+            insert_data = [
+                (document_id, faq["question"], faq["answer"], q_emb.tolist(), a_emb.tolist())
+                for faq, q_emb, a_emb in zip(faq_entries, q_embs, a_embs)
+            ]
+            
+            cur.executemany("""
+                INSERT INTO faqs (document_id, question_text, answer_text, question_embedding, answer_embedding)
+                VALUES (%s, %s, %s, %s, %s)
+            """, insert_data)
 
-        # Insert into database using executemany for better performance
-        cur = self.conn.cursor()
-        insert_data = [
-            (faq["question_text"], faq["answer_text"], q_emb.tolist(), a_emb.tolist())
-            for faq, q_emb, a_emb in zip(all_faqs, q_embs, a_embs)
-        ]
-        cur.executemany("""
-            INSERT INTO faqs (question_text, answer_text, question_embedding, answer_embedding)
-            VALUES (%s, %s, %s, %s)
-        """, insert_data)
+            self.conn.commit()
 
-        self.conn.commit()
-
-        return {
-            "status": "success",
-            "indexed_count": len(all_faqs),
-            "message": f"Successfully indexed {len(all_faqs)} FAQs from {len(documents)} document(s)"
-        }
+            return {
+                "status": "success",
+                "indexed_count": len(faq_entries),
+                "document_id": document_id,
+                "message": f"Erfolgreich {len(faq_entries)} FAQs aus '{filename}' indiziert"
+            }
+            
+        except Exception as e:
+            if self.conn:
+                self.conn.rollback()
+            raise e
 
     def get_stats(self) -> Dict[str, any]:
         """Get database statistics."""
