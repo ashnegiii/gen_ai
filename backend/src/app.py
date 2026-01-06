@@ -93,8 +93,7 @@ def chat():
     # context = retrieval_service.retrieve(query=query, document_id=document_id)
 
     # 3. Moritz: Prompt engineering and LLM generation
-    # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that
-    
+    # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that    
     pass
 
 
