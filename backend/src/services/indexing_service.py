@@ -24,6 +24,7 @@ class IndexingService:
         self.db_config = db_config
         self.conn: Optional[psycopg.Connection] = None
         self._ensure_connection()
+        self.model_name = "all-MiniLM-L6-v2"
 
     def _ensure_connection(self):
         """Ensure database connection exists and tables are created."""
@@ -78,6 +79,7 @@ class IndexingService:
 
     def _texts_to_embeddings(self, texts: List[str], model_name: str = "all-MiniLM-L6-v2") -> np.ndarray:
         """Convert texts to embeddings using SentenceTransformer."""
+        self.model_name = model_name
         try:
             from sentence_transformers import SentenceTransformer
             model = SentenceTransformer(model_name)

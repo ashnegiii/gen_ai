@@ -1,7 +1,7 @@
-from backend.src.services.generation_service import GenerationService
-from backend.src.services.indexing_service import IndexingService
-from backend.src.services.query_rewriting_service import QueryRewritingService
-from backend.src.services.retrieval_service import RetrievalService
+from services.generation_service import GenerationService
+from services.indexing_service import IndexingService
+from services.query_rewriting_service import QueryRewritingService
+from services.retrieval_service import RetrievalService
 
 
 class RAGPipeline:
@@ -20,11 +20,11 @@ class RAGPipeline:
         """Index documents into the vector database."""
         return self.indexing_service.index_documents(documents)
 
-    def query(self):
+    def query(self, query):
         # Step 1 (Kevin): Optimize the user's query for better retrieval
 
         # Step 2 (Paula): Search for relevant chunks using the optimized query
-
+        self.retrieval_service.retrieve_documents(query, self.indexing_service)
         # Step 3 (Moritz): Generate a response using the retrieved chunks and the original query
 
         pass

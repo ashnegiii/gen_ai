@@ -4,6 +4,7 @@ import time
 
 from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
+from pipeline import RAGPipeline
 
 from .services.generation_service import GenerationService
 from .services.indexing_service import IndexingService
@@ -66,7 +67,7 @@ def upload():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.route('/api/query', methods=["POST"])
+#@app.route('/api/query', methods=["POST"])
 def chat():
     """
     Main RAG endpoint.
@@ -146,6 +147,9 @@ def chat_test():
 
     data = request.get_json()
     query = data.get("query", "")
+
+    rag_pipeline = RAGPipeline()
+    rag_pipeline.query(query)
 
     def generate():
         # Example streamed answer
