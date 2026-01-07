@@ -6,14 +6,15 @@ from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 from pipeline import RAGPipeline
 
-from .services.generation_service import GenerationService
-from .services.indexing_service import IndexingService
-from .services.retrieval_service import RetrievalService
+from services.generation_service import GenerationService
+from services.indexing_service import IndexingService
+from services.query_rewriting_service import QueryRewritingService
+from services.retrieval_service import RetrievalService
 
 app = Flask(__name__)
 CORS(app)
 indexing_service = IndexingService()
-
+query_rewriting_service = QueryRewritingService()
 retrieval_service = RetrievalService()
 
 generation_service = GenerationService()
@@ -81,20 +82,26 @@ def chat():
 
     data = request.get_json()
     # the user's original question/query
-    
     query = data.get("query")
     # the id of the document to restrict the retrieval to
     document_id = data.get("documentId")
+    # chat history for conversational context (last 5 messages)
+    chat_history = data.get("chatHistory", [])
 
-    # 1. Kevin: Query rewriting/optimization
-    # optimized_query = generation_service.rewrite_query(query)
+    # 1. Kevin: Query rewriting/optimization (with chat history for context resolution)
+    rewritten = query_rewriting_service.rewrite_query(query, chat_history=chat_history)
+    optimized_query = rewritten["cleaned_query"]
 
     # 2. Paula: Retrieve relevant documents ONLY from the selected document_id
-    # context = retrieval_service.retrieve(query=query, document_id=document_id)
+    # context = retrieval_service.retrieve(query=optimized_query, document_id=document_id)
 
     # 3. Moritz: Prompt engineering and LLM generation
     # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that    
-    pass
+    # TODO: For now, return a dummy response for testing query rewriting
+    return Response(
+        f"[DEBUG] Query rewriting test:\nOriginal: {query}\nOptimized: {optimized_query}\nIs Contextual: {rewritten['is_contextual']}",
+        mimetype="text/plain"
+    )
 
 
 @app.route("/api/documents", methods=["GET"])
