@@ -2,16 +2,22 @@ import csv
 import io
 import time
 
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify, request, stream_with_context
 from flask_cors import CORS
 from pipeline import RAGPipeline
 
-from .services.generation_service import GenerationService
-from .services.indexing_service import IndexingService
-from .services.retrieval_service import RetrievalService
+from backend.src.services.generation_service import GenerationService
+from backend.src.services.indexing_service import IndexingService
+from backend.src.services.retrieval_service import RetrievalService
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:3000", "http://127.0.0.1:3000"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 indexing_service = IndexingService()
 
 retrieval_service = RetrievalService()
@@ -66,6 +72,7 @@ def upload():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+rag_pipeline = RAGPipeline()
 
 @app.route('/api/query', methods=["POST"])
 def chat():
@@ -80,20 +87,26 @@ def chat():
     """
 
     data = request.get_json()
+
     # the user's original question/query
-    
     query = data.get("query")
+
     # the id of the document to restrict the retrieval to
     document_id = data.get("documentId")
+
+    if not query:
+        return jsonify({"error": "Query is required"}), 400
 
     # 1. Kevin: Query rewriting/optimization
     # optimized_query = generation_service.rewrite_query(query)
 
     # 2. Paula: Retrieve relevant documents ONLY from the selected document_id
     # context = retrieval_service.retrieve(query=query, document_id=document_id)
+    response_generator = rag_pipeline.query(query)
 
     # 3. Moritz: Prompt engineering and LLM generation
-    # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that    
+    # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that
+    return Response(stream_with_context(response_generator), mimetype="text/plain")
     pass
 
 
@@ -171,4 +184,4 @@ If you still don't receive the email after trying these steps, please contact ou
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

@@ -24,7 +24,15 @@ class RAGPipeline:
         # Step 1 (Kevin): Optimize the user's query for better retrieval
 
         # Step 2 (Paula): Search for relevant chunks using the optimized query
-        self.retrieval_service.retrieve_documents(query, self.indexing_service)
+        chunks = self.retrieval_service.retrieve_documents(query, self.indexing_service)
+
         # Step 3 (Moritz): Generate a response using the retrieved chunks and the original query
+        if not chunks:
+            print("No relevant chunks found.")
+
+            chunks = []
+            # TODO: further handling if no chunks are found.
+
+        return self.generation_service.generate_response_stream(query=query, retrieved_chunks=chunks)
 
         pass
