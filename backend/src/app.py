@@ -98,12 +98,8 @@ def chat():
     # context = retrieval_service.retrieve(query=optimized_query, document_id=document_id)
 
     # 3. Moritz: Prompt engineering and LLM generation
-    # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that    
-    # TODO: For now, return a dummy response for testing query rewriting
-    return Response(
-        f"[DEBUG] Query rewriting test:\nOriginal: {query}\nOptimized: {optimized_query}\nIs Contextual: {rewritten['is_contextual']}",
-        mimetype="text/plain"
-    )
+    # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that 
+    pass
 
 
 @app.route("/api/documents", methods=["GET"])
