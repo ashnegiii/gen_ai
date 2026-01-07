@@ -15,7 +15,7 @@ https://stackoverflow.com/a/43226395
 
 from typing import List
 from sentence_transformers import SentenceTransformer
-from services.indexing_service import IndexingService
+from src.services.indexing_service import IndexingService
 
 class RetrievalService:
     def retrieve_documents(self, optimized_query: str, indexing_service: IndexingService) -> List[str]:
