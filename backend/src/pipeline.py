@@ -22,10 +22,10 @@ class RAGPipeline:
 
     def query(self, query):
         # Step 1 (Kevin): Optimize the user's query for better retrieval
-        optimized_query = self.query_rewriting_service.get_optimized_query(query)
+        #optimized_query = self.query_rewriting_service.get_optimized_query(query)
         
         # Step 2 (Paula): Search for relevant chunks using the optimized query
-        self.retrieval_service.retrieve_documents(optimized_query, self.indexing_service)
+        #top_k_results = self.retrieval_service.retrieve_documents(optimized_query, self.indexing_service)
         # Step 3 (Moritz): Generate a response using the retrieved chunks and the original query
 
         pass
