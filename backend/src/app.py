@@ -8,6 +8,7 @@ from pipeline import RAGPipeline
 
 from backend.src.services.generation_service import GenerationService
 from backend.src.services.indexing_service import IndexingService
+from services.query_rewriting_service import QueryRewritingService
 from backend.src.services.retrieval_service import RetrievalService
 
 app = Flask(__name__)
@@ -19,6 +20,8 @@ CORS(app, resources={
     }
 })
 indexing_service = IndexingService()
+
+query_rewriting_service = QueryRewritingService()
 
 retrieval_service = RetrievalService()
 
@@ -87,18 +90,17 @@ def chat():
     """
 
     data = request.get_json()
-
     # the user's original question/query
+    
     query = data.get("query")
-
     # the id of the document to restrict the retrieval to
     document_id = data.get("documentId")
+    # chat history for conversational context (last 5 messages)
+    chat_history = data.get("chatHistory", [])
 
-    if not query:
-        return jsonify({"error": "Query is required"}), 400
-
-    # 1. Kevin: Query rewriting/optimization
-    # optimized_query = generation_service.rewrite_query(query)
+    # 1. Kevin: Query rewriting/optimization (with chat history for context resolution)
+    rewritten = query_rewriting_service.rewrite_query(query, chat_history=chat_history)
+    optimized_query = rewritten["cleaned_query"]
 
     # 2. Paula: Retrieve relevant documents ONLY from the selected document_id
     # context = retrieval_service.retrieve(query=query, document_id=document_id)
@@ -107,7 +109,6 @@ def chat():
     # 3. Moritz: Prompt engineering and LLM generation
     # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that
     return Response(stream_with_context(response_generator), mimetype="text/plain")
-    pass
 
 
 @app.route("/api/documents", methods=["GET"])

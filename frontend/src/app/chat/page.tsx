@@ -138,13 +138,20 @@ export default function Chat() {
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_CHAT_URL || "http://localhost:5001/api/query"
 
+      // Get last 5 messages (excluding welcome message) for context
+      const chatHistory = messages
+        .filter((m) => m.id !== "welcome")
+        .slice(-5)
+        .map((m) => ({ role: m.role, content: m.content }))
+
       const response = await fetch(backendUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ 
-    		query: userMessage.content,
-    		documentId: selectedDocumentId
-  }),
+        body: JSON.stringify({
+          query: userMessage.content,
+          documentId: selectedDocumentId,
+          chatHistory: chatHistory,
+        }),
       })
 
       if (!response.ok) {
