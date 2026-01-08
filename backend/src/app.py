@@ -6,10 +6,10 @@ from flask import Flask, Response, jsonify, request, stream_with_context
 from flask_cors import CORS
 from pipeline import RAGPipeline
 
-from backend.src.services.generation_service import GenerationService
-from backend.src.services.indexing_service import IndexingService
+from services.generation_service import GenerationService
+from services.indexing_service import IndexingService
 from services.query_rewriting_service import QueryRewritingService
-from backend.src.services.retrieval_service import RetrievalService
+from services.retrieval_service import RetrievalService
 
 app = Flask(__name__)
 CORS(app, resources={
@@ -104,7 +104,7 @@ def chat():
 
     # 2. Paula: Retrieve relevant documents ONLY from the selected document_id
     # context = retrieval_service.retrieve(query=query, document_id=document_id)
-    response_generator = rag_pipeline.query(query)
+    response_generator = rag_pipeline.query(optimized_query)
 
     # 3. Moritz: Prompt engineering and LLM generation
     # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that

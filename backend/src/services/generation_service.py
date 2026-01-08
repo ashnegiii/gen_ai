@@ -1,6 +1,6 @@
 # TODO Moritz: Implement methods for generation
 import os
-from backend.src.utils.llm.ollama_provider import OllamaProvider
+from utils.llm.ollama_provider import OllamaProvider
 from .prompt.prompts_library import RAGPrompts
 
 class GenerationService:
