@@ -102,13 +102,11 @@ def chat():
     optimized_query = rewritten["cleaned_query"]
 
     # 2. Paula: Retrieve relevant documents ONLY from the selected document_id
-    context = retrieval_service.retrieve_documents(optimized_query=optimized_query, document_id=document_id, indexing_service=indexing_service)
-    response_generator = rag_pipeline.query(optimized_query)
-    # TODO: use the context
+    # TODO: context retrieval eigentlich nicht hier- sondern in der pipeline query methode.
+    # context = retrieval_service.retrieve_documents(optimized_query=optimized_query, document_id=document_id, indexing_service=indexing_service)
 
     # 3. Moritz: Prompt engineering and LLM generation
-    # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that
-    return Response(stream_with_context(response_generator), mimetype="text/plain")
+    return Response(rag_pipeline.query(optimized_query, document_id), mimetype="text/plain")
 
 
 @app.route("/api/documents", methods=["GET"])

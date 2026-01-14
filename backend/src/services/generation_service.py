@@ -1,4 +1,3 @@
-# TODO Moritz: Implement methods for generation
 import os
 from utils.llm.ollama_provider import OllamaProvider
 from .prompt.prompts_library import RAGPrompts
@@ -13,12 +12,18 @@ class GenerationService:
         """
         Returns a generator that yields the response tokens one by one.
         """
-        # Prepare the prompt
-        context_text_list = retrieved_chunks # chunks as a list of strings
+        # Clean the chunks if necessary
+        clean_chunks = []
+        for chunk in retrieved_chunks:
+            if isinstance(chunk, tuple) or isinstance(chunk, list):
+                clean_chunks.append(chunk[0]) # Extract the string from the tuple/list
+            else:
+                clean_chunks.append(str(chunk)) # Ensure it's a string
 
+        # prepare the prompt
         system_instruction = RAGPrompts.SYSTEM_PROMPT_INSTRUCTED_GENERATION
 
-        formatted_prompt = RAGPrompts.format_main_prompt(context_text_list, query)
+        formatted_prompt = RAGPrompts.format_main_prompt(query, clean_chunks)
 
         print(f"DEBUG PROMPT:\n{formatted_prompt}\n--- END OF PROMPT ---\n")
 
