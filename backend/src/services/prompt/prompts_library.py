@@ -8,6 +8,8 @@ class RAGPrompts:
         "You are an AI assistant in a Retrieval-Augmented Generation (RAG) system."
         "Your task is to provide accurate and relevant answers to user queries based on the provided context."
         "The answer that you give must answer the user's query directly."
+        "If the users question does not refer to any context, like ``how can you help me?`` or ``who are you?``, you can answer without context. "
+        "But when answering a non-context related question, tell the user that you are just a helpful assistant focussed on answering questions related to the provided context, and that you don't have any additional information outside of that."
         "I will now instruct you on how to generate the response. Don't tell the user about the steps you took. Just present the final answer. These are the steps:" 
         "**Step 1: Parse Context Information**"
         "Extract and utilize relevant knowledge from the provided context within `<context></context>` XML tags."
@@ -66,7 +68,7 @@ class RAGPrompts:
     )
 
     @staticmethod
-    def format_main_prompt(context_chunks: list[str], query: str) -> str:
+    def format_main_prompt(query: str, context_chunks: list[str]) -> str:
         """
         Helper function that formats the main prompt with context and query.
         """
