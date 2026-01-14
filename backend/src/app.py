@@ -89,25 +89,27 @@ def chat():
     3. Moritz: Prompt engineering and LLM generation
     """
 
-    data = request.get_json()
-    # the user's original question/query
-    query = data.get("query")
-    # the id of the document to restrict the retrieval to
-    document_id = data.get("documentId")
-    # chat history for conversational context (last 5 messages)
-    chat_history = data.get("chatHistory", [])
+    try:
+        data = request.get_json()
+        query = data.get("query")   # the user's original question/query
+        document_id = data.get("documentId")    # the id of the document to restrict the retrieval to
+        chat_history = data.get("chatHistory", [])  # chat history for conversational context (last 5 messages)
 
-    # 1. Kevin: Query rewriting/optimization (with chat history for context resolution)
-    rewritten = query_rewriting_service.rewrite_query(query, chat_history=chat_history)
-    optimized_query = rewritten["cleaned_query"]
+        if not query:
+            return jsonify({
+                "status": "error",
+                "message": "Query is required"
+            }), 400
 
-    # 2. Paula: Retrieve relevant documents ONLY from the selected document_id
-    # TODO: context retrieval eigentlich nicht hier- sondern in der pipeline query methode.
-    # context = retrieval_service.retrieve_documents(optimized_query=optimized_query, document_id=document_id, indexing_service=indexing_service)
+        response_generator = rag_pipeline.run_rag_pipeline(
+            user_query=query,
+            document_id=document_id,
+            chat_history=chat_history
+        )
 
-    # 3. Moritz: Prompt engineering and LLM generation
-    return Response(rag_pipeline.query(optimized_query, document_id), mimetype="text/plain")
-
+        return Response(response_generator, mimetype="application/json")
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route("/api/documents", methods=["GET"])
 def list_documents():
