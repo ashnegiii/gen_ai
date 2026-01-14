@@ -22,18 +22,10 @@ class RAGPipeline:
 
     def query(self, query):
         # Step 1 (Kevin): Optimize the user's query for better retrieval
-        optimized_query = self.query_rewriting_service.get_optimized_query(query)
-        print("Optimized Query:", optimized_query)
-
+        #optimized_query = self.query_rewriting_service.get_optimized_query(query)
+        
         # Step 2 (Paula): Search for relevant chunks using the optimized query
-        chunks = self.retrieval_service.retrieve_documents(optimized_query, self.indexing_service)
+        #top_k_results = self.retrieval_service.retrieve_documents(optimized_query, self.indexing_service)
         # Step 3 (Moritz): Generate a response using the retrieved chunks and the original query
-        if not chunks:
-            print("Chunks are null/ empty")
-
-            chunks = []
-            # TODO: further handling if no chunks are found.
-
-        return self.generation_service.generate_response_stream(query=optimized_query, retrieved_chunks=chunks)
 
         pass
