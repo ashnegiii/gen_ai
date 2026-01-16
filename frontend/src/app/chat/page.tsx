@@ -45,7 +45,7 @@ export default function Chat() {
   useEffect(() => {
     const fetchDocs = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/documents")
+        const response = await fetch("http://localhost:5001/api/documents")
         if (!response.ok) throw new Error("Failed to fetch documents")
         const data = await response.json()
 
@@ -136,7 +136,7 @@ export default function Chat() {
     setMessages((prev) => [...prev, assistantMessage])
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_CHAT_URL || "http://localhost:5000/api/query"
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_CHAT_URL || "http://localhost:5001/api/query"
 
       // Get last 5 messages (excluding welcome message) for context
       const chatHistory = messages

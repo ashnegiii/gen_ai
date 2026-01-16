@@ -2,7 +2,7 @@ import csv
 import io
 import time
 
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify, request, stream_with_context
 from flask_cors import CORS
 from pipeline import RAGPipeline
 
@@ -12,7 +12,13 @@ from services.query_rewriting_service import QueryRewritingService
 from services.retrieval_service import RetrievalService
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:3000", "http://127.0.0.1:3000"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 indexing_service = IndexingService()
 
 query_rewriting_service = QueryRewritingService()
@@ -69,6 +75,7 @@ def upload():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+rag_pipeline = RAGPipeline()
 
 @app.route('/api/query', methods=["POST"])
 def chat():
@@ -82,25 +89,27 @@ def chat():
     3. Moritz: Prompt engineering and LLM generation
     """
 
-    data = request.get_json()
-    # the user's original question/query
-    query = data.get("query")
-    # the id of the document to restrict the retrieval to
-    document_id = data.get("documentId")
-    # chat history for conversational context (last 5 messages)
-    chat_history = data.get("chatHistory", [])
+    try:
+        data = request.get_json()
+        query = data.get("query")   # the user's original question/query
+        document_id = data.get("documentId")    # the id of the document to restrict the retrieval to
+        chat_history = data.get("chatHistory", [])  # chat history for conversational context (last 5 messages)
 
-    # 1. Kevin: Query rewriting/optimization (with chat history for context resolution)
-    rewritten = query_rewriting_service.rewrite_query(query, chat_history=chat_history)
-    optimized_query = rewritten["cleaned_query"]
+        if not query:
+            return jsonify({
+                "status": "error",
+                "message": "Query is required"
+            }), 400
 
-    # 2. Paula: Retrieve relevant documents ONLY from the selected document_id
-    context = retrieval_service.retrieve_documents(optimized_query=optimized_query, document_id=document_id, indexing_service=indexing_service)
+        response_generator = rag_pipeline.run_rag_pipeline(
+            user_query=query,
+            document_id=document_id,
+            chat_history=chat_history
+        )
 
-    # 3. Moritz: Prompt engineering and LLM generation
-    # For streaming, you would return a Response(generation_service.stream_answer(query, context)) or sum shit like that 
-    pass
-
+        return Response(response_generator, mimetype="application/json")
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route("/api/documents", methods=["GET"])
 def list_documents():
@@ -176,4 +185,4 @@ If you still don't receive the email after trying these steps, please contact ou
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

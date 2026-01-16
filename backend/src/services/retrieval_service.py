@@ -15,7 +15,7 @@ https://docs.cloud.google.com/alloydb/docs/ai/run-vector-similarity-search#run-p
 
 from typing import List
 from sentence_transformers import SentenceTransformer
-from src.services.indexing_service import IndexingService
+from .indexing_service import IndexingService
 
 class RetrievalService:
     def retrieve_documents(self, optimized_query: str, document_id: str, indexing_service: IndexingService) -> List[str]:
@@ -42,7 +42,9 @@ class RetrievalService:
         retrieve_query = f"SELECT answer_text \n FROM faqs WHERE document_id={document_id} \n ORDER BY answer_embedding::vector <=> '{query_embedding}' LIMIT {k};"
         # TAKEN FROM END 3
         cur.execute(retrieve_query)
-        relevant_results = cur.fetchall()
+        raw_results = cur.fetchall()
+        # Unpack the results to extract the string from the tuples
+        relevant_results = [row[0] for row in raw_results]
         indexing_service.close()
         # TAKEN FROM END 2
         return relevant_results

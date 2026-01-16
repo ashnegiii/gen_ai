@@ -24,7 +24,7 @@ export default function Home() {
 
 	const fetchDocuments = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/documents');
+            const response = await fetch('http://localhost:5001/api/documents');
             if (!response.ok) throw new Error('Failed to fetch documents');
             const data = await response.json();
             setDocuments(data.documents);
@@ -51,7 +51,7 @@ export default function Home() {
 			formData.append('file', file);
 
 			// Upload
-			const response = await fetch('http://localhost:5000/api/upload', {
+			const response = await fetch('http://localhost:5001/api/upload', {
 				method: 'POST',
 				body: formData,
 			});
@@ -92,7 +92,7 @@ export default function Home() {
 		setDeletingId(id);
 
 		try {
-			const response = await fetch('http://localhost:5000/api/documents', {
+			const response = await fetch('http://localhost:5001/api/documents', {
 				method: 'DELETE',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ id }),

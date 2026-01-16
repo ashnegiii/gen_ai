@@ -1,8 +1,7 @@
-version: '3.8'
-
 services:
   postgres:
     image: ankane/pgvector:latest
+    container_name: postgres_genai
     environment:
       POSTGRES_DB: gen_ai
       POSTGRES_USER: postgres
@@ -10,7 +9,15 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data_local:/var/lib/postgresql/data
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_service
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_storage:/root/.ollama
+    restart: unless-stopped
 
 volumes:
-  postgres_data:
+  ollama_storage:

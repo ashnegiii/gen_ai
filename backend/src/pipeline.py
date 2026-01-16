@@ -20,12 +20,18 @@ class RAGPipeline:
         """Index documents into the vector database."""
         return self.indexing_service.index_documents(documents)
 
-    def query(self, query):
-        # Step 1 (Kevin): Optimize the user's query for better retrieval
-        #optimized_query = self.query_rewriting_service.get_optimized_query(query)
-        
-        # Step 2 (Paula): Search for relevant chunks using the optimized query
-        #top_k_results = self.retrieval_service.retrieve_documents(optimized_query, self.indexing_service)
-        # Step 3 (Moritz): Generate a response using the retrieved chunks and the original query
+    def run_rag_pipeline(self, user_query, document_id, chat_history):
+        # Step 1 (Kevin): Query Rewriting
+        rewriting_result = self.query_rewriting_service.rewrite_query(user_query, chat_history)
+        optimized_query = rewriting_result.get("cleaned_query", user_query)
 
-        pass
+        print(f"DEBUG: Original: '{user_query}' -> Optimized: '{optimized_query}'")
+        
+        # Step 2 (Paula): Retrieval
+        chunks = self.retrieval_service.retrieve_documents(
+            optimized_query,
+            document_id,
+            self.indexing_service
+        )
+        # Step : Generation
+        return self.generation_service.generate_response_stream(query=user_query, retrieved_chunks=chunks)
