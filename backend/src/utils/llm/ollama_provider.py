@@ -32,7 +32,7 @@ class OllamaProvider(LLMProvider):
             ],
             "stream": True,
             "options": {
-                "temperature": 0.01
+                "temperature": 0.1
             }
         }
 
