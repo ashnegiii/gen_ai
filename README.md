@@ -9,11 +9,13 @@ The Frontend uses **React**. All dependencies are listed and managed in `package
 -   `Python 3.9+ or higher installed`
 -   `pip (Python package installer)`
 -   `venv`
+-   `Docker` (for database setup)
 
 Check:
 ```bash
 python --version
 pip --version
+docker --version
 ```
 ## 2. Create and activate virtual environment
 
@@ -34,9 +36,9 @@ pip install -r requirements.txt
 ## 4.1. Setup LLM
 (If you have llama3 running locally already, you can skip this step)
 
-Follow the instructions at ollama to install Ollama, if you haven't got Ollama installed already (https://ollama.com/download/windows).
+Follow the instructions at ollama to install Ollama, if you haven't got Ollama installed already (https://ollama.com).
 
-Install llama3:
+Pull the llama3 model:
 ```bash
 ollama pull llama3
 ```
@@ -45,23 +47,29 @@ After installing, call
 ```bash
 ollama list
 ```
-to verify that llama3 is installed. You should see `llama3` in the list of models. Run `llama3` by calling
-```bash
-ollama run llama3
-```
+to check if llama3 is available. You should see `llama3` in the list of models. 
+
+Then, ensure that the Ollama Desktop App is running in the background. 
+To check if it's running, open your browser and navigate to `http://localhost:11434`. You should see the text `Ollama is running`.
 
 ## 4.2. Setup Database
-The database is setup using Docker. Make sure you have Docker installed and running on your machine. Then, from the project root directory, run:
+The database is setup using Docker. From the project root directory, run:
 ```bash
 cd backend
 docker-compose up -d
 ```
 
+To check if the database container is running, execute:
+```bash
+docker ps
+```
+You should see a container named `postgres_genai` with the status `Up` in the list of running containers.
+
 ## 5. Run the Backend Application
 Make sure the environment variable `LLAMA_MODEL` is set to `llama3` in the `.env` file. Start the application by navigating to the backend/src directory and then runnging app.py:
 ```bash
 cd backend/src
-python ./app.py
+python app.py
 ```
 ## 6. Run the Frontend Application
 In a separate terminal, navigate to the frontend directory and start the React application:
@@ -70,6 +78,8 @@ cd frontend # start from the project root directory
 npm install
 npm run dev
 ```
+
+The app is now running. Open your browser and navigate to `http://localhost:3000` to start using the app.
 
 ## 7. Environment Variables
 
