@@ -5,8 +5,9 @@ import logging
 import numpy as np
 import psycopg
 from dotenv import load_dotenv
+from config import config
 
-load_dotenv()
+# load_dotenv()
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -19,11 +20,11 @@ class IndexingService:
         """Initialize the IndexingService with database configuration."""
         if db_config is None:
             db_config = {
-                "host": os.getenv("POSTGRES_HOST", "localhost"),
-                "port": os.getenv("POSTGRES_PORT", "5433"),
-                "database": os.getenv("POSTGRES_DB", "gen_ai"),
-                "user": os.getenv("POSTGRES_USER", "postgres"),
-                "password": os.getenv("POSTGRES_PASSWORD", "postgres"),
+                "host": config.POSTGRES_HOST,
+                "port": config.POSTGRES_PORT,
+                "database": config.POSTGRES_DB,
+                "user": config.POSTGRES_USER,
+                "password": config.POSTGRES_PASSWORD,
             }
         self.db_config = db_config
         self.conn: Optional[psycopg.Connection] = None
