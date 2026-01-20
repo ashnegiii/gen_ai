@@ -8,8 +8,8 @@ The Frontend uses **React** (https://react.dev/). All dependencies are listed an
 
 ### 1. Prerequisites
 
--   `Python 3.9+ or higher installed`
--   `pip (Python package installer: https://pypi.org/project/pip/)`
+-   `Python 3.9+` (or higher installed)
+-   `pip` (Python package installer: https://pypi.org/project/pip/)
 -   `venv` (https://docs.python.org/3/library/venv.html)
 -   `Docker` (for database setup)
 -   `Node.js` (https://nodejs.org/en)
