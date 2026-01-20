@@ -2,18 +2,18 @@
 
 ## Setup Guide
 
-The Backend uses **Python + Flask**. All dependencies are listed and managed in `requirements.txt`. The installation and setup is described below.
+The Backend uses **Python** (https://www.python.org/) & **Flask** (https://flask.palletsprojects.com/en/stable/). All dependencies are listed and managed in `requirements.txt`. The installation and setup is described below.
 
-The Frontend uses **React**. All dependencies are listed and managed in `package.json`. The installation and setup is described below aswell.
+The Frontend uses **React** (https://react.dev/). All dependencies are listed and managed in `package.json`. The installation and setup is described below as well.
 
-## 1. Prerequisites
+### 1. Prerequisites
 
 -   `Python 3.9+ or higher installed`
--   `pip (Python package installer)`
--   `venv`
+-   `pip (Python package installer: https://pypi.org/project/pip/)`
+-   `venv` (https://docs.python.org/3/library/venv.html)
 -   `Docker` (for database setup)
--   `Node.js`
--   `npm`
+-   `Node.js` (https://nodejs.org/en)
+-   `npm` (https://www.npmjs.com/)
 
 Check:
 ```bash
@@ -26,7 +26,7 @@ npm --version
 
 **Hint: Depending on your Python installation use either `python` or `python3` in the following commands**
 
-## 2. Create and activate virtual environment
+### 2. Create and activate virtual environment
 
 ```bash
 python -m venv venv
@@ -36,16 +36,16 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-## 3. Install dependencies
+### 3. Install dependencies
 (Only needed for the first setup):
 ```bash
 pip install -r requirements.txt
 ```
 
-## 4.1. Setup LLM
+### 4.1. Setup LLM
 (If you have llama3 running locally already, you can skip this step)
 
-Follow the instructions at ollama to install Ollama, if you haven't got Ollama installed already (https://ollama.com).
+Follow the instructions at Ollama to install Ollama, if you haven't got it installed already (https://ollama.com).
 
 Pull the llama3 model:
 ```bash
@@ -56,7 +56,7 @@ After installing, call
 ```bash
 ollama list
 ```
-to check if llama3 is available. You should see `llama3` in the list of models.
+to check if llama3 (https://ollama.com/library/llama3) is available. You should see `llama3` in the list of models.
 
 Then either call
 ```bash
@@ -66,8 +66,8 @@ or start the **Ollama Desktop App**.
 
 To check if it's running, open your browser and navigate to `http://localhost:11434`. You should see the text `Ollama is running`.
 
-## 4.2. Setup Database
-The database is setup using Docker. From the project root directory, run:
+### 4.2. Setup Database
+The database is setup using Docker (https://www.docker.com/). From the project root directory, run:
 ```bash
 # start from the project root directory
 cd backend
@@ -80,14 +80,14 @@ docker ps
 ```
 You should see a container named `postgres_genai` with the status `Up` in the list of running containers.
 
-## 5. Run the Backend Application
+### 5. Run the Backend Application
 Make sure the environment variable `LLAMA_MODEL` is set to `llama3` in the `.env` file. Start the application by navigating to the backend/src directory and then running app.py:
 ```bash
 # start from the project root directory
 cd backend/src
 python app.py
 ```
-## 6. Run the Frontend Application
+### 6. Run the Frontend Application
 In a separate terminal, navigate to the frontend directory and start the React application:
 ```bash
 # start from the project root directory
@@ -98,11 +98,11 @@ npm run dev
 
 The app is now running. Open your browser and navigate to [`http://localhost:3000`](http://localhost:3000) to start using the app.
 
-## 7. Environment Variables
+### 7. Environment Variables
 
 The `.env.example` file documents the required environment variables. Changes to the config can be made here.
 
-## 8. Ideal User Flow
+### 8. Ideal User Flow
 
 1. Open your browser and navigate to [`http://localhost:3000`](http://localhost:3000).
 2. Upload a FAQ document - any **CSV** file with format `(question,answer)`. *Hint: Use our sample documents: `faq_example_dataset.csv` and `faq_example_dataset_2.csv`*
@@ -110,7 +110,7 @@ The `.env.example` file documents the required environment variables. Changes to
 4. If multiple FAQ documents have been uploaded select the preferred document.
 5. Ask any question - for best results it should relate to the questions in the uploaded FAQ.
 
-## 9. Query Flow Pipeline:
+## Query Flow Pipeline:
 
 1. User inputs query via frontend
 2. Frontend sends query to POST /api/query
