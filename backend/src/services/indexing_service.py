@@ -90,7 +90,7 @@ class IndexingService:
             embs = model.encode(
                 texts,
                 convert_to_numpy=True,
-                show_progress_bar=True
+                show_progress_bar=False
             ).astype(np.float32)
         except Exception as e:
             logger.error(f"Could not load SentenceTransformer model. Using random embeddings. Error: {e}")
