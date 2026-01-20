@@ -1,4 +1,6 @@
-# Setup Guide
+# Generative AI-powered project: Customer Support Chatbot 
+
+## Setup Guide
 
 The Backend uses **Python + Flask**. All dependencies are listed and managed in `requirements.txt`. The installation and setup is described below.
 
@@ -96,12 +98,19 @@ The `.env.example` file documents the required environment variables. Changes to
 4. Retrieval:
     - Receive optimized query
     - Generate embedding for the query using the same embedding model used during indexing
-    - Search the vector database for relevant chunks based on similarity to the query embedding
-    - Rank by similarity score
-    - Top-K relevant chunks based on a predefined strategy (e.g., top-k, threshold score, etc.)
-    - Return top-k relevant chunks with metadata
+    - Search the vector database for relevant chunks (answers) based on similarity to the query embedding
+    - Rank results by similarity score
+    - Return top-K relevant chunks
 5. Response Generation:
     - Receive user query and relevant chunks
     - Construct a prompt combining the user query and the retrieved chunks
     - Use a language model to generate a response based on the constructed prompt
     - Return generated response to frontend
+    
+## Remarks
+
+The contents of the .csv files containing questions and answers from interactions with customer support teams were written based on the contents of the synthetic dataset from [1]. Our smaller datasets are released under the “Community Data License Agreement – Sharing – Version 1.0” license.
+
+## References
+
+[1] "bitext" organization on GitHub, “customer-support-llm-chatbot-training-dataset“ GitHub Repository, GitHub, https://github.com/bitext/customer-support-llm-chatbot-training-dataset (last accessed Jan. 19, 2026). 
