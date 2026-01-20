@@ -1,7 +1,8 @@
 # Flask Backend - Setup Guide
 
-The Backend uses **Python + Flask**.
-All dependencies are listed and managed in `requirements.txt`.
+The Backend uses **Python + Flask**. All dependencies are listed and managed in `requirements.txt`. The installation and setup is described below.
+
+The Frontend uses **React**. All dependencies are listed and managed in `package.json`. The installation and setup is described below.
 
 ## 1. Prerequisites
 
