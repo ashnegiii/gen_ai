@@ -10,7 +10,6 @@ All dependencies are listed and managed in `requirements.txt`.
 -   `venv`
 
 Check:
-
 ```bash
 python --version
 pip --version
@@ -25,14 +24,14 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-## 3. Install dependencies (first setup)
-
+## 3. Install dependencies
+(Only needed for the first setup):
 ```bash
 pip install -r requirements.txt
 ```
 
 ## 4. Setup LLM
-If you have llama3 running locally already, you can skip this step.
+(If you have llama3 running locally already, you can skip this step)
 
 Follow the instructions at ollama to install Ollama, if you haven't got Ollama installed already (https://ollama.com/download/windows).
 
@@ -51,54 +50,40 @@ ollama run llama3
 ```
 
 ## 4. Run theFlask application
-Make sure the environment variable `LLAMA_MODEL` is set to `llama3` in the `.env` file. Start the application by running:
+Make sure the environment variable `LLAMA_MODEL` is set to `llama3` in the `.env` file. Start the application by navigating to the backend/src directory and then runnging app.py:
 ```bash
+cd backend/src
 python src/app.py
+```
+## 5. Run Frontend application
+In a separate terminal, navigate to the frontend directory and start the React application:
+```bash
+cd frontend # start from the project root directory
+npm install
+npm run dev
 ```
 
 ## 6. Environment Variables
 
-I have added a `.env.example` file to document the required environment variables.
-Please create a local `.env` file in the backend/ directory based on this example and populate it with the appropriate values.
-Make sure to inform the team when new environment variables are added (e.g. database configuration).
+The `.env.example` file documents the required environment variables. Changes to the config can be made here.
 
-## 7. Architecture Overview
-
-### 1. Define Database schema (Kevin):
-
-1. Define database schema and indexes for storing documents, embeddings and metadata
-2. Set up database connection and ORM models
-
-### 2. Indexing (Kevin):
-
-1. User uploads file via frontend drag-drop
-2. Frontend sends file to POST /api/upload
-3. Extract text from file (PDF, CSV, DOCX, etc.) (file format and data structure need to be discussed)
-4. Preprocess text (cleaning, normalization, remove headers/footers, tables handling etc.) (to be discussed)
-5. Chunk text based on a predefined strategy (e.g., size, sentences, etc.)
-6. Generate embeddings for each chunk using an embedding model
-7. Store embeddings and associated metadata in a vector database (postgres with pgvector?):
-8. Return success response to frontend
-
-### 3. Query Flow Pipeline (Kevin -> Paula -> Moritz):
+## 7. Query Flow Pipeline:
 
 1. User inputs query via frontend
 2. Frontend sends query to POST /api/query
-3. Query Rewriting (Kevin):
+3. Query Rewriting:
     - Receive user query
     - Use a language model to rewrite the query for better context and clarity (Fix spelling, add context from user history, etc.)
     - Return opitimized query
-4. Retrieval (Paula):
+4. Retrieval:
     - Receive optimized query
     - Generate embedding for the query using the same embedding model used during indexing
     - Search the vector database for relevant chunks based on similarity to the query embedding
     - Rank by similarity score
     - Top-K relevant chunks based on a predefined strategy (e.g., top-k, threshold score, etc.)
     - Return top-k relevant chunks with metadata
-5. Response Generation (Moritz):
+5. Response Generation:
     - Receive user query and relevant chunks
     - Construct a prompt combining the user query and the retrieved chunks
     - Use a language model to generate a response based on the constructed prompt
     - Return generated response to frontend
-
-If you have any questions or run into issues, feel free to reach out to me.
