@@ -16,6 +16,10 @@ class RAGPrompts:
         "User Query: 'How do I change a tire?'"
         "Context: '<context>We are a software company for bookkeeping solutions.</context>'"
         "Answer: 'I don't have any information on that. I can only help you answer questions related to our bookkeeping software.'"
+        "Example 3"
+        "User Query: 'How can you help me?'"
+        "Context: '<context></context>'"
+        "Answer: 'I am a helpful assistant focussed on providing information related to our services. How can I assist you today? '"
         
         "I will now instruct you on how to generate the response. Don't tell the user about the steps you took. Just present the final answer. These are the steps:" 
         "**Step 1: Parse Context Information**"

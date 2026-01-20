@@ -32,7 +32,10 @@ class RetrievalService:
 
         # TAKEN FROM START 1
         model = SentenceTransformer(embedding_model_name)
-        query_embedding = model.encode(optimized_query).tolist()
+        query_embedding = model.encode(
+            optimized_query,
+            show_progress_bar=False
+        ).tolist()
         # TAKEN FROM END 1
 
         # TAKEN FROM START 2

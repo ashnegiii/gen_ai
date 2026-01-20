@@ -1,11 +1,15 @@
 import os
 from typing import Dict, List, Optional
+import logging
 
 import numpy as np
 import psycopg
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 class IndexingService:
@@ -84,10 +88,12 @@ class IndexingService:
             from sentence_transformers import SentenceTransformer
             model = SentenceTransformer(model_name)
             embs = model.encode(
-                texts, convert_to_numpy=True).astype(np.float32)
+                texts,
+                convert_to_numpy=True,
+                show_progress_bar=True
+            ).astype(np.float32)
         except Exception as e:
-            print(
-                f"Warning: Could not load SentenceTransformer model. Using random embeddings. Error: {e}")
+            logger.error(f"Could not load SentenceTransformer model. Using random embeddings. Error: {e}")
             # Fallback: deterministic random vectors
             rng = np.random.RandomState(42)
             dim = 384

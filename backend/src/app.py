@@ -1,8 +1,9 @@
 import csv
 import io
 import time
+import logging
 
-from flask import Flask, Response, jsonify, request, stream_with_context
+from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 from pipeline import RAGPipeline
 
@@ -26,6 +27,11 @@ query_rewriting_service = QueryRewritingService()
 retrieval_service = RetrievalService()
 
 generation_service = GenerationService()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
 
 
 @app.route("/api/upload", methods=["POST"])
@@ -101,6 +107,7 @@ def chat():
                 "message": "Query is required"
             }), 400
 
+        logger.info(f"Received query: {query}")
         response_generator = rag_pipeline.run_rag_pipeline(
             user_query=query,
             document_id=document_id,
@@ -109,6 +116,7 @@ def chat():
 
         return Response(response_generator, mimetype="application/json")
     except Exception as e:
+        logger.error(f"Error in /api/query: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route("/api/documents", methods=["GET"])
@@ -160,9 +168,6 @@ def chat_test():
 
     data = request.get_json()
     query = data.get("query", "")
-
-    rag_pipeline = RAGPipeline()
-    rag_pipeline.query(query)
 
     def generate():
         # Example streamed answer
