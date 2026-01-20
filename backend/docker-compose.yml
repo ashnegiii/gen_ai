@@ -10,14 +10,3 @@ services:
       - "5433:5432"
     volumes:
       - ./postgres_data_local:/var/lib/postgresql/data
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama_service
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_storage:/root/.ollama
-    restart: unless-stopped
-
-volumes:
-  ollama_storage:
