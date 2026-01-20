@@ -42,7 +42,8 @@ class GenerationService:
             else:
                 clean_chunks.append(str(chunk)) # Ensure it's a string
 
-        clean_chunks = clean_chunks[:k]
+        if k > 0:
+            clean_chunks = clean_chunks[:k]
 
         # prepare the prompt
         system_instruction = RAGPrompts.SYSTEM_PROMPT_INSTRUCTED_GENERATION
