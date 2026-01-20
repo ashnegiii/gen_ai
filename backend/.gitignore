@@ -52,3 +52,8 @@ Thumbs.db
 *.key
 *.pem
 .venv/
+
+# =========================
+# Postgres data
+# =========================
+/postgres_data_local/
