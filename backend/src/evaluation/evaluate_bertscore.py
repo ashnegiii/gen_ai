@@ -1,13 +1,21 @@
 """
-Fetch and return FAQs from the database
+Get the FAQs and run the semantic evaluation for all questions up to the specified limit
 """
 import bert_score
+import json
+from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from src.evaluation.db_faqs import fetch_faqs
 from src.evaluation.candidate_client import get_candidate_answer
 
+MODEL_TYPE = "bert-base-uncased"
+MODEL_LANG = "en"
+RESCALE_WITH_BASELINE = True
 
-def run_evaluation(document_id: int = 1, base_url: str = "http://localhost:5000", limit: int = 3):
+
+def run_evaluation(document_id: int = 1, base_url: str = "http://localhost:5001", limit: int = 3):
     """
     Get FAQ question and answers for the given document ID.
     Prompt the model with the question to get an answer (candidate).
@@ -22,8 +30,8 @@ def run_evaluation(document_id: int = 1, base_url: str = "http://localhost:5000"
     """
     rows = fetch_faqs(document_id=document_id, limit=limit)
 
-    cands = []
-    refs = []
+    candidates = []
+    references = []
 
     for r in rows:
         q = r["question"]
@@ -31,31 +39,73 @@ def run_evaluation(document_id: int = 1, base_url: str = "http://localhost:5000"
         cand = get_candidate_answer(
             base_url=base_url, question=q, document_id=str(document_id))
 
-        cands.append(cand)
-        refs.append(ref)
+        candidates.append(cand)
+        references.append(ref)
 
     (P, R, F) = bert_score.score(
-        cands,
-        refs,
-        model_type="roberta-large",
-        lang="en",
-        rescale_with_baseline=True,
+        cands=candidates,
+        refs=references,
+        model_type=MODEL_TYPE,
+        lang=MODEL_LANG,
+        rescale_with_baseline=RESCALE_WITH_BASELINE,
     )
 
-    # Per-sample results
-    for i, r in enumerate(rows):
-        print(f"\nFAQ {r['faq_id']}")
-        print("Q: ", r["question"])
-        print("Ref:", r["reference_answer"])
-        print("Cand:", cands[i])
-        print(
-            f"BERTScore: P={P[i].item():.4f} R={R[i].item():.4f} F={F[i].item():.4f}")
+    # after you have rows, candidates, references and computed P,R,F
+    now = datetime.now(ZoneInfo("Europe/Vienna"))
+    results_dir = Path(__file__).resolve().parent / "results"
+    out_path = results_dir / \
+        f"bertscore_results_{now.strftime('%Y%m%d_%H%M%S')}.json"
 
-    # Aggregate
-    print("\n--- Aggregate ---")
-    print(f"Avg P: {P.mean().item():.4f}")
-    print(f"Avg R: {R.mean().item():.4f}")
-    print(f"Avg F: {F.mean().item():.4f}")
+    meta = {
+        "document_id": document_id,
+        "base_url": base_url,
+        "model_type": MODEL_TYPE,
+        "lang": MODEL_LANG,
+        "rescale_with_baseline": RESCALE_WITH_BASELINE,
+        "n_samples": len(candidates),
+        "created_at": now.isoformat(),
+    }
+
+    write_results_json(out_path, meta, rows, candidates, P, R, F)
+
+
+def write_results_json(
+    out_path: Path,
+    meta: dict,
+    rows: list[dict],
+    candidates: list[str],
+    P,
+    R,
+    F,
+):
+    samples = []
+    for i, r in enumerate(rows):
+        samples.append({
+            "faq_id": r.get("faq_id"),
+            "question": r["question"],
+            "reference_answer": r["reference_answer"],
+            "candidate_answer": candidates[i],
+            "bertscore": {
+                "precision": float(P[i].item()),
+                "recall": float(R[i].item()),
+                "f1": float(F[i].item()),
+            }
+        })
+
+    result = {
+        "meta": meta,
+        "samples": samples,
+        "summary": {
+            "avg_precision": float(P.mean().item()),
+            "avg_recall": float(R.mean().item()),
+            "avg_f1": float(F.mean().item()),
+        }
+    }
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(
+        result, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"[EVALUATION] Wrote results: {out_path}")
 
 
 if __name__ == "__main__":
