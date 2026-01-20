@@ -31,7 +31,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## 4. Setup LLM
+## 4.1. Setup LLM
 (If you have llama3 running locally already, you can skip this step)
 
 Follow the instructions at ollama to install Ollama, if you haven't got Ollama installed already (https://ollama.com/download/windows).
@@ -50,13 +50,20 @@ to verify that llama3 is installed. You should see `llama3` in the list of model
 ollama run llama3
 ```
 
-## 4. Run theFlask application
+## 4.2. Setup Database
+The database is setup using Docker. Make sure you have Docker installed and running on your machine. Then, from the project root directory, run:
+```bash
+cd backend
+docker-compose up -d
+```
+
+## 5. Run the Backend Application
 Make sure the environment variable `LLAMA_MODEL` is set to `llama3` in the `.env` file. Start the application by navigating to the backend/src directory and then runnging app.py:
 ```bash
 cd backend/src
-python src/app.py
+python ./app.py
 ```
-## 5. Run Frontend application
+## 6. Run the Frontend Application
 In a separate terminal, navigate to the frontend directory and start the React application:
 ```bash
 cd frontend # start from the project root directory
@@ -64,18 +71,18 @@ npm install
 npm run dev
 ```
 
-## 6. Environment Variables
+## 7. Environment Variables
 
 The `.env.example` file documents the required environment variables. Changes to the config can be made here.
 
-## 7. Query Flow Pipeline:
+## 8. Query Flow Pipeline:
 
 1. User inputs query via frontend
 2. Frontend sends query to POST /api/query
 3. Query Rewriting:
     - Receive user query
     - Use a language model to rewrite the query for better context and clarity (Fix spelling, add context from user history, etc.)
-    - Return opitimized query
+    - Return optimized query
 4. Retrieval:
     - Receive optimized query
     - Generate embedding for the query using the same embedding model used during indexing
