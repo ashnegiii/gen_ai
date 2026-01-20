@@ -29,7 +29,7 @@ class IndexingService:
         self.db_config = db_config
         self.conn: Optional[psycopg.Connection] = None
         self._ensure_connection()
-        self.model_name = "all-MiniLM-L6-v2"
+        self.model_name = config.EMBEDDING_MODEL_NAME
 
     def _ensure_connection(self):
         """Ensure database connection exists and tables are created."""
