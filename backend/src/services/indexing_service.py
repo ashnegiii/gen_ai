@@ -1,11 +1,16 @@
 import os
 from typing import Dict, List, Optional
+import logging
 
 import numpy as np
 import psycopg
 from dotenv import load_dotenv
+from config import config
 
-load_dotenv()
+# load_dotenv()
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 class IndexingService:
@@ -15,16 +20,16 @@ class IndexingService:
         """Initialize the IndexingService with database configuration."""
         if db_config is None:
             db_config = {
-                "host": os.getenv("POSTGRES_HOST", "localhost"),
-                "port": os.getenv("POSTGRES_PORT", "5433"),
-                "database": os.getenv("POSTGRES_DB", "gen_ai"),
-                "user": os.getenv("POSTGRES_USER", "postgres"),
-                "password": os.getenv("POSTGRES_PASSWORD", "postgres"),
+                "host": config.POSTGRES_HOST,
+                "port": config.POSTGRES_PORT,
+                "database": config.POSTGRES_DB,
+                "user": config.POSTGRES_USER,
+                "password": config.POSTGRES_PASSWORD,
             }
         self.db_config = db_config
         self.conn: Optional[psycopg.Connection] = None
         self._ensure_connection()
-        self.model_name = "all-MiniLM-L6-v2"
+        self.model_name = config.EMBEDDING_MODEL_NAME
 
     def _ensure_connection(self):
         """Ensure database connection exists and tables are created."""
@@ -84,10 +89,12 @@ class IndexingService:
             from sentence_transformers import SentenceTransformer
             model = SentenceTransformer(model_name)
             embs = model.encode(
-                texts, convert_to_numpy=True).astype(np.float32)
+                texts,
+                convert_to_numpy=True,
+                show_progress_bar=False
+            ).astype(np.float32)
         except Exception as e:
-            print(
-                f"Warning: Could not load SentenceTransformer model. Using random embeddings. Error: {e}")
+            logger.error(f"Could not load SentenceTransformer model. Using random embeddings. Error: {e}")
             # Fallback: deterministic random vectors
             rng = np.random.RandomState(42)
             dim = 384

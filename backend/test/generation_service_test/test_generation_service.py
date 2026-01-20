@@ -21,7 +21,7 @@ class TestGenerationService(unittest.TestCase):
             "France is known for its culture and history."
         ]
 
-        response_generator = self.service.generate_response_stream(query, chunks)
+        response_generator = self.service.generate_response_stream(query, chunks, 3)
 
         full_answer = ""
 
