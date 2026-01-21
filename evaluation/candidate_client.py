@@ -13,7 +13,7 @@ def get_candidate_answer(base_url: str, question: str, document_id: int) -> str:
     :param question: The question that the model will be asked
     :type question: str
     :param document_id: The ID of the document that the question is from
-    :type document_id: str
+    :type document_id: int
     :return: The answer outputted by our model
     :rtype: str
     """
