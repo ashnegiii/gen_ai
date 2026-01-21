@@ -1,0 +1,257 @@
+{
+  "meta": {
+    "base_url": "http://localhost:5001",
+    "model_type": "roberta-large",
+    "lang": "en",
+    "rescale_with_baseline": "True",
+    "n_samples": 20,
+    "created_at": "2026-01-21T14:16:27.420280+01:00"
+  },
+  "samples": [
+    {
+      "faq_id": "21",
+      "document_id": 4,
+      "question": "Which steps are needed for filling a claim?",
+      "reference_answer": "Firstly, relevant documentation such as the invoice should be kept. Afterwards, you should contact the customer support team, state the reasons for the claim and send the needed documents. The customer support team will reach out with the resolution of the claim as soon as possible.",
+      "candidate_answer": "Firstly, relevant documentation such as the invoice should be kept. Afterwards, you should contact the customer support team, state the reasons for the claim and send the needed documents.",
+      "bertscore": {
+        "precision": 0.9520235061645508,
+        "recall": 0.749665379524231,
+        "f1": 0.8493163585662842
+      }
+    },
+    {
+      "faq_id": "22",
+      "document_id": 4,
+      "question": "What is the current status of my order?",
+      "reference_answer": "After logging in, you can find a list of your orders in the ''My orders'' section. After you click on a chosen order, you will see its' current status.",
+      "candidate_answer": "After logging in, you can find a list of your orders in the ''My orders'' section. After you click on a chosen order, you will see its' current status.",
+      "bertscore": {
+        "precision": 0.9999992847442627,
+        "recall": 0.9999992847442627,
+        "f1": 0.9999992847442627
+      }
+    },
+    {
+      "faq_id": "23",
+      "document_id": 4,
+      "question": "How do I cancel an order?",
+      "reference_answer": "After you log into your account and go to the ''My orders'' section, you should select the order in question and click on ''Cancel order''. You will be asked for confirmation about the decision. If further assistance is needed, you may contact the customer support team.",
+      "candidate_answer": "After you log into your account and go to the ''My orders'' section, you should select the order in question and click on ''Cancel order''. You will be asked for confirmation about the decision. If further assistance is needed, you may contact the customer support team.",
+      "bertscore": {
+        "precision": 0.9999992847442627,
+        "recall": 0.9999992847442627,
+        "f1": 0.9999992847442627
+      }
+    },
+    {
+      "faq_id": "24",
+      "document_id": 4,
+      "question": "How do I download an order's invoice?",
+      "reference_answer": "While being logged into your account, you should go to the ''My orders'' section and click on ''Invoice''. The invoice is available as a PDF file.",
+      "candidate_answer": "While being logged into your account, go to the \"My orders\" section and click on \"Invoice\". The invoice is available as a PDF file.",
+      "bertscore": {
+        "precision": 0.900126039981842,
+        "recall": 0.8469972610473633,
+        "f1": 0.8736446499824524
+      }
+    },
+    {
+      "faq_id": "25",
+      "document_id": 4,
+      "question": "Which payment methods are available?",
+      "reference_answer": "One can make a payment using a credit or debit card (e.g. Visa or Mastercard), by making a bank transfer or by using Google Pay, Apple Pay, or PayPal.",
+      "candidate_answer": "One can make a payment using a credit or debit card (e.g. Visa or Mastercard), by making a bank transfer, or by using Google Pay, Apple Pay, or PayPal.",
+      "bertscore": {
+        "precision": 0.9871047735214233,
+        "recall": 0.9872029423713684,
+        "f1": 0.987174928188324
+      }
+    },
+    {
+      "faq_id": "26",
+      "document_id": 4,
+      "question": "How can I modify the shipping address?",
+      "reference_answer": "If you haven't made an order yet, you can navigate to the section called ''My account'', and click on ''Personal information''. You can then edit the shipping address. If you already made an order and the given shipping address is not the correct one, you may contact the customer service team for further assistance.",
+      "candidate_answer": "If you haven't made an order yet, you can navigate to the section called ''My account'', and click on ''Personal information''. You can then edit the shipping address. If you already made an order and the given shipping address is not the correct one, you may contact the customer service team for further assistance.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "27",
+      "document_id": 4,
+      "question": "When can I expect my order to arrive?",
+      "reference_answer": "You can view the estimated delivery period for a specific order by finding it in the list shown in the ''My orders'' section and by selecting the said order.",
+      "candidate_answer": "You can view the estimated delivery period for a specific order by finding it in the list shown in the ''My orders'' section and by selecting the said order.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "28",
+      "document_id": 4,
+      "question": "How do I unsubscribe from the newsletter?",
+      "reference_answer": "After logging into your account, you can click on ''My account'' and then on ''Newsletter''. The final step is selecting ''Unsubscribe from the newsletter''.",
+      "candidate_answer": "After logging into your account, you can click on ''My account'' and then on ''Newsletter''. The final step is selecting ''Unsubscribe from the newsletter''.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "29",
+      "document_id": 4,
+      "question": "When can the customer support team be contacted?",
+      "reference_answer": "The customer support team is reachable 24/7, so everyday at any time.",
+      "candidate_answer": "The customer support team is reachable 24/7, so everyday at any time.",
+      "bertscore": {
+        "precision": 0.9999992847442627,
+        "recall": 0.9999992847442627,
+        "f1": 0.9999992847442627
+      }
+    },
+    {
+      "faq_id": "30",
+      "document_id": 4,
+      "question": "What should I do if I encounter problems while trying to pay for an order?",
+      "reference_answer": "First of all, you should check if the given information about your chosen payment method was typed correctly. If this also fails, you may try another payment method, or contact the payment provider or the customer support team and explain the issue.",
+      "candidate_answer": "First of all, you should check if the given information about your chosen payment method was typed correctly. If this also fails, you may try another payment method, or contact the payment provider or the customer support team and explain the issue.",
+      "bertscore": {
+        "precision": 0.9999985694885254,
+        "recall": 0.9999985694885254,
+        "f1": 0.9999985694885254
+      }
+    },
+    {
+      "faq_id": "31",
+      "document_id": 4,
+      "question": "How do I update my billing address?",
+      "reference_answer": "To update your billing address, log in to your account and navigate to the billing or payment settings section. Locate the billing address details and edit the information as needed. Make sure to save your changes so they apply to future invoices and payments. If you have an ongoing subscription, the updated address will be reflected on upcoming invoices.",
+      "candidate_answer": "To update your billing address, log in to your account and navigate to the billing or payment settings section. Locate the billing address details and edit the information as needed. Make sure to save your changes so they apply to future invoices and payments.",
+      "bertscore": {
+        "precision": 0.9559026956558228,
+        "recall": 0.8081048727035522,
+        "f1": 0.8812556266784668
+      }
+    },
+    {
+      "faq_id": "32",
+      "document_id": 4,
+      "question": "What should I do if my order shows as delivered but I did not receive it?",
+      "reference_answer": "If your order is marked as delivered but you have not received it, first check with neighbors or others at your address who may have accepted the delivery. Verify the shipping address listed in your order details.",
+      "candidate_answer": "If your order is marked as delivered but you have not received it, first check with neighbors or others at your address who may have accepted the delivery. Verify the shipping address listed in your order details.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "33",
+      "document_id": 4,
+      "question": "How can I track my shipment?",
+      "reference_answer": "You can track your shipment by logging in to your account and going to the 'My orders' section. Select the relevant order to view tracking information and a tracking link provided by the shipping carrier. Tracking updates may take some time to appear after the order has been shipped.",
+      "candidate_answer": "You can track your shipment by logging in to your account and going to the 'My orders' section. Select the relevant order to view tracking information and a tracking link provided by the shipping carrier.",
+      "bertscore": {
+        "precision": 0.9687604308128357,
+        "recall": 0.7729949355125427,
+        "f1": 0.8694363832473755
+      }
+    },
+    {
+      "faq_id": "34",
+      "document_id": 4,
+      "question": "Why was my order canceled automatically?",
+      "reference_answer": "An order may be canceled automatically due to payment failure, stock unavailability, or security checks. You can find the cancellation reason in the order details section of your account. If you believe the cancellation was a mistake or need assistance placing a new order, please contact customer support.",
+      "candidate_answer": "An order may be canceled automatically due to payment failure, stock unavailability, or security checks. You can find the cancellation reason in the order details section of your account.",
+      "bertscore": {
+        "precision": 0.9324473738670349,
+        "recall": 0.665295422077179,
+        "f1": 0.7960863709449768
+      }
+    },
+    {
+      "faq_id": "35",
+      "document_id": 4,
+      "question": "How do I apply a discount or promo code?",
+      "reference_answer": "To apply a discount or promo code, enter the code during checkout in the designated promo or discount field. Make sure the code is entered exactly as provided and is still valid. The discount will be applied to your total before payment confirmation.",
+      "candidate_answer": "To apply a discount or promo code, enter the code during checkout in the designated promo or discount field. Make sure the code is entered exactly as provided and is still valid. The discount will be applied to your total before payment confirmation.",
+      "bertscore": {
+        "precision": 0.9999996423721313,
+        "recall": 0.9999996423721313,
+        "f1": 0.9999996423721313
+      }
+    },
+    {
+      "faq_id": "36",
+      "document_id": 4,
+      "question": "Can I change or cancel my order after placing it?",
+      "reference_answer": "Whether you can change or cancel an order depends on its current status. Log in to your account and check the order details in the 'My orders' section. If the order has not yet been processed or shipped, you may see options to modify or cancel it.",
+      "candidate_answer": "Whether you can change or cancel an order depends on its current status. Log in to your account and check the order details in the 'My orders' section. If the order has not yet been processed or shipped, you may see options to modify or cancel it.",
+      "bertscore": {
+        "precision": 1.0000007152557373,
+        "recall": 1.0000007152557373,
+        "f1": 1.0000007152557373
+      }
+    },
+    {
+      "faq_id": "37",
+      "document_id": 4,
+      "question": "How do I request a refund for an order?",
+      "reference_answer": "To request a refund, go to the 'My orders' section in your account and select the order you want to return. Follow the instructions to submit a refund or return request. Once approved, refunds are processed to the original payment method and may take several business days to appear.",
+      "candidate_answer": "To request a refund, go to the 'My orders' section in your account and select the order you want to return. Follow the instructions to submit a refund or return request. Once approved, refunds are processed to the original payment method and may take several business days to appear.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "38",
+      "document_id": 4,
+      "question": "Why is my refund taking longer than expected?",
+      "reference_answer": "Refund processing times can vary depending on the payment method and your bank or card provider. After a refund is approved, it may take several business days for the funds to appear in your account. You can check the refund status in your order details.",
+      "candidate_answer": "Refund processing times can vary depending on the payment method and your bank or card provider. After a refund is approved, it may take several business days for the funds to appear in your account.",
+      "bertscore": {
+        "precision": 0.9562553763389587,
+        "recall": 0.8113952279090881,
+        "f1": 0.8831111788749695
+      }
+    },
+    {
+      "faq_id": "39",
+      "document_id": 4,
+      "question": "What browsers or devices are supported by the application?",
+      "reference_answer": "The application supports the latest versions of major browsers such as Chrome, Firefox, Safari, and Edge. It is also compatible with most modern desktop and mobile devices. For the best experience, ensure your browser and operating system are up to date.",
+      "candidate_answer": "The application supports the latest versions of major browsers such as Chrome, Firefox, Safari, and Edge. It is also compatible with most modern desktop and mobile devices. For the best experience, ensure your browser and operating system are up to date.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "40",
+      "document_id": 4,
+      "question": "How do I change the language of the application?",
+      "reference_answer": "You can change the application language by logging in and going to the account or preferences settings. Look for a language or localization option and select your preferred language from the list. The interface will update immediately or after refreshing the page, depending on the platform.",
+      "candidate_answer": "You can change the application language by logging in and going to the account or preferences settings. Look for a language or localization option and select your preferred language from the list. The interface will update immediately or after refreshing the page, depending on the platform.",
+      "bertscore": {
+        "precision": 0.9999996423721313,
+        "recall": 0.9999996423721313,
+        "f1": 0.9999996423721313
+      }
+    }
+  ],
+  "summary": {
+    "avg_precision": 0.9826309084892273,
+    "avg_recall": 0.9320826530456543,
+    "avg_f1": 0.9570010900497437
+  }
+}

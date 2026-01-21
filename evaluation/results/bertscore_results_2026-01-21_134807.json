@@ -1,0 +1,257 @@
+{
+  "meta": {
+    "base_url": "http://localhost:5001",
+    "model_type": "roberta-large",
+    "lang": "en",
+    "rescale_with_baseline": "False",
+    "n_samples": 20,
+    "created_at": "2026-01-21T13:48:07.059148+01:00"
+  },
+  "samples": [
+    {
+      "faq_id": "1",
+      "document_id": 1,
+      "question": "How do I reset my account password?",
+      "reference_answer": "To reset your account password, go to the login page and click on the “Forgot password” link. Enter the email address associated with your account and submit the form. You will receive a password reset email within a few minutes. Open the email and follow the secure link to create a new password. Make sure your new password meets the security requirements, including minimum length and a mix of characters. If you do not receive the email, please check your spam or junk folder before contacting support.",
+      "candidate_answer": "To reset your account password, go to the login page and click on the “Forgot password” link. Enter the email address associated with your account and submit the form. You will receive a password reset email within a few minutes. Open the email and follow the secure link to create a new password. Make sure your new password meets the security requirements, including minimum length and a mix of characters.",
+      "bertscore": {
+        "precision": 0.9593556523323059,
+        "recall": 0.7807942032814026,
+        "f1": 0.8689119219779968
+      }
+    },
+    {
+      "faq_id": "2",
+      "document_id": 1,
+      "question": "I did not receive the password reset email. What should I do?",
+      "reference_answer": "If you did not receive the password reset email, first verify that you entered the correct email address during the reset process. Check your spam, junk, or promotions folders, as automated emails are sometimes filtered. Ensure that your email provider is not blocking messages from our domain. If you have requested multiple reset emails in a short time, please wait a few minutes before trying again. If the issue persists, contact our support team so we can manually assist you.",
+      "candidate_answer": "First verify that you entered the correct email address during the reset process. Check your spam, junk, or promotions folders, as automated emails are sometimes filtered. Ensure that your email provider is not blocking messages from our domain. If you have requested multiple reset emails in a short time, please wait a few minutes before trying again. If the issue persists, contact our support team so we can manually assist you.",
+      "bertscore": {
+        "precision": 0.9247685670852661,
+        "recall": 0.8515185117721558,
+        "f1": 0.8880942463874817
+      }
+    },
+    {
+      "faq_id": "3",
+      "document_id": 1,
+      "question": "Why am I unable to log in even though my credentials are correct?",
+      "reference_answer": "If you are unable to log in despite using the correct credentials, the issue may be related to account lockout, browser cache, or temporary server issues. First, try clearing your browser cache and cookies or logging in using a different browser or device. Make sure that Caps Lock is not enabled when entering your password. If you recently changed your password, ensure you are using the updated one. If the problem continues, your account may be temporarily locked for security reasons, and you should contact support.",
+      "candidate_answer": "The issue may be related to account lockout, browser cache, or temporary server issues. First, try clearing your browser cache and cookies or logging in using a different browser or device. Make sure that Caps Lock is not enabled when entering your password. If you recently changed your password, ensure you are using the updated one.",
+      "bertscore": {
+        "precision": 0.9063881039619446,
+        "recall": 0.6713550686836243,
+        "f1": 0.7868013978004456
+      }
+    },
+    {
+      "faq_id": "4",
+      "document_id": 1,
+      "question": "How can I update my email address associated with the account?",
+      "reference_answer": "To update your email address, log in to your account and navigate to the account settings or profile section. Locate the email address field and enter your new email address. You may be asked to verify the new email by clicking on a confirmation link sent to it. Until the new email is verified, your old email address will remain active. If you no longer have access to the old email address, please contact support for manual verification.",
+      "candidate_answer": "To update your email address, log in to your account and navigate to the account settings or profile section. Locate the email address field and enter your new email address. You may be asked to verify the new email by clicking on a confirmation link sent to it. Until the new email is verified, your old email address will remain active. If you no longer have access to the old email address, please contact support for manual verification.",
+      "bertscore": {
+        "precision": 0.9999992847442627,
+        "recall": 0.9999992847442627,
+        "f1": 0.9999992847442627
+      }
+    },
+    {
+      "faq_id": "5",
+      "document_id": 1,
+      "question": "How do I change my subscription plan?",
+      "reference_answer": "You can change your subscription plan by logging in to your account and going to the billing or subscription section. There you will see the available plans and their features. Select the plan you wish to switch to and confirm the change. Plan upgrades usually take effect immediately, while downgrades may apply at the end of the current billing cycle. Any pricing differences will be clearly shown before confirmation.",
+      "candidate_answer": "You can change your subscription plan by logging in to your account and going to the billing or subscription section. There you will see the available plans and their features. Select the plan you wish to switch to and confirm the change. Plan upgrades usually take effect immediately, while downgrades may apply at the end of the current billing cycle. Any pricing differences will be clearly shown before confirmation.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "6",
+      "document_id": 1,
+      "question": "Why was my payment declined?",
+      "reference_answer": "A payment may be declined for several reasons, including insufficient funds, expired cards, incorrect billing details, or restrictions set by your bank. First, verify that your payment information is correct and up to date. Try using a different payment method if available. If the problem persists, contact your bank or card provider to ensure they are not blocking the transaction. You can also reach out to our support team for further assistance.",
+      "candidate_answer": "A payment may be declined for several reasons, including insufficient funds, expired cards, incorrect billing details, or restrictions set by your bank. First, verify that your payment information is correct and up to date. Try using a different payment method if available. If the problem persists, contact your bank or card provider to ensure they are not blocking the transaction. You can also reach out to our support team for further assistance.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "7",
+      "document_id": 1,
+      "question": "How can I view or download my invoices?",
+      "reference_answer": "Invoices can be accessed from your account dashboard under the billing or payment history section. You will see a list of all past invoices with dates and amounts. Each invoice can be viewed online or downloaded as a PDF for your records. If you require invoices for a custom date range or with additional company information, please contact support.",
+      "candidate_answer": "You will see a list of all past invoices with dates and amounts. Each invoice can be viewed online or downloaded as a PDF for your records.",
+      "bertscore": {
+        "precision": 0.8444647192955017,
+        "recall": 0.4466916024684906,
+        "f1": 0.6390691995620728
+      }
+    },
+    {
+      "faq_id": "8",
+      "document_id": 1,
+      "question": "Is my personal data stored securely?",
+      "reference_answer": "Yes, we take data security very seriously. All sensitive information is encrypted both in transit and at rest using industry-standard security protocols. Access to personal data is restricted and monitored, and we regularly perform security audits and updates. We also comply with applicable data protection regulations. For more details, you can review our privacy policy or contact support with specific questions.",
+      "candidate_answer": "Yes, all sensitive information is encrypted both in transit and at rest using industry-standard security protocols.",
+      "bertscore": {
+        "precision": 0.8023080825805664,
+        "recall": 0.3097847104072571,
+        "f1": 0.5457309484481812
+      }
+    },
+    {
+      "faq_id": "9",
+      "document_id": 1,
+      "question": "How do I delete my account permanently?",
+      "reference_answer": "To permanently delete your account, log in and navigate to the account settings section. Look for the option labeled “Delete account” or “Close account.” Follow the on-screen instructions to confirm your request. Please note that account deletion is irreversible and will remove all associated data after a short grace period. If you are unable to access your account, contact support to request deletion.",
+      "candidate_answer": "To permanently delete your account, log in and navigate to the account settings section. Look for the option labeled “Delete account” or “Close account.” Follow the on-screen instructions to confirm your request. Please note that account deletion is irreversible and will remove all associated data after a short grace period. If you are unable to access your account, contact support to request deletion.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "10",
+      "document_id": 1,
+      "question": "What should I do if the application is running slowly or crashing?",
+      "reference_answer": "If the application is slow or crashing, first ensure that you are using the latest version of the app or browser. Restart the application or your device to clear temporary issues. Check your internet connection, as unstable connectivity can affect performance. If the problem continues, try disabling browser extensions or reinstalling the app. Should the issue persist, contact support with details about your device, operating system, and the steps that led to the problem.",
+      "candidate_answer": "If the application is slow or crashing, first ensure that you are using the latest version of the app or browser. Restart the application or your device to clear temporary issues. Check your internet connection, as unstable connectivity can affect performance. If the problem continues, try disabling browser extensions or reinstalling the app. Should the issue persist, contact support with details about your device, operating system, and the steps that led to the problem.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "11",
+      "document_id": 1,
+      "question": "Can I change my password while I am logged in?",
+      "reference_answer": "Yes, you can change your password at any time while logged in. Go to your account settings and select the option to change your password. You will be asked to enter your current password and then choose a new one. After saving the changes, the new password will take effect immediately. For security reasons, you may be logged out of other active sessions.",
+      "candidate_answer": "Unfortunately, I can't help you with that. The context only provides information on how to reset a forgotten password, not about changing an existing one while logged in.",
+      "bertscore": {
+        "precision": 0.24357813596725464,
+        "recall": 0.16444221138954163,
+        "f1": 0.20499710738658905
+      }
+    },
+    {
+      "faq_id": "12",
+      "document_id": 1,
+      "question": "Why was my account temporarily locked?",
+      "reference_answer": "Your account may be temporarily locked after multiple failed login attempts as a security measure. This helps protect your account from unauthorized access. In most cases, the lock will be lifted automatically after a short period. If you believe this happened in error or need immediate access, please contact support for assistance.",
+      "candidate_answer": "Your account may have been temporarily locked after multiple failed login attempts as a security measure to protect it from unauthorized access.",
+      "bertscore": {
+        "precision": 0.7322990298271179,
+        "recall": 0.28830939531326294,
+        "f1": 0.5020546913146973
+      }
+    },
+    {
+      "faq_id": "13",
+      "document_id": 1,
+      "question": "How do I update my payment method?",
+      "reference_answer": "You can update your payment method by logging in and navigating to the billing settings section of your account. There you can add a new card or replace an existing payment method. Make sure to save your changes to ensure future payments are processed correctly. If a payment recently failed, updating your payment method may automatically retry the charge.",
+      "candidate_answer": "You can update your payment method by logging in and navigating to the billing settings section of your account. There you can add a new card or replace an existing payment method. Make sure to save your changes to ensure future payments are processed correctly. If a payment recently failed, updating your payment method may automatically retry the charge.",
+      "bertscore": {
+        "precision": 0.9999996423721313,
+        "recall": 0.9999996423721313,
+        "f1": 0.9999996423721313
+      }
+    },
+    {
+      "faq_id": "14",
+      "document_id": 1,
+      "question": "Will I be notified before my subscription renews?",
+      "reference_answer": "Yes, subscription renewals are typically communicated in advance via email, depending on your plan and notification settings. The renewal date and amount can always be reviewed in the billing section of your account. To avoid unexpected charges, make sure your contact and billing information is kept up to date.",
+      "candidate_answer": "Yes, subscription renewals are typically communicated in advance via email, depending on your plan and notification settings.",
+      "bertscore": {
+        "precision": 0.8771443963050842,
+        "recall": 0.4534219205379486,
+        "f1": 0.6578164100646973
+      }
+    },
+    {
+      "faq_id": "15",
+      "document_id": 1,
+      "question": "How do I cancel my subscription?",
+      "reference_answer": "To cancel your subscription, log in to your account and go to the subscription or billing section. Select the option to cancel and follow the confirmation steps. Your subscription will remain active until the end of the current billing period unless stated otherwise. After cancellation, you will not be charged again.",
+      "candidate_answer": "To cancel your subscription, log in to your account and go to the subscription or billing section. Select the option to cancel and follow the confirmation steps. Your subscription will remain active until the end of the current billing period unless stated otherwise. After cancellation, you will not be charged again.",
+      "bertscore": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    {
+      "faq_id": "16",
+      "document_id": 1,
+      "question": "Can I reactivate my account after deleting it?",
+      "reference_answer": "Once an account has been permanently deleted, it cannot be reactivated. All associated data is removed after the deletion process is completed. If you deleted your account by mistake and are still within the grace period, contact support as soon as possible to check whether recovery is possible.",
+      "candidate_answer": "Once an account has been permanently deleted, it cannot be reactivated. All associated data is removed after the deletion process is completed.",
+      "bertscore": {
+        "precision": 0.9286647439002991,
+        "recall": 0.468745619058609,
+        "f1": 0.6898143291473389
+      }
+    },
+    {
+      "faq_id": "17",
+      "document_id": 1,
+      "question": "Why do I see unexpected charges on my invoice?",
+      "reference_answer": "Unexpected charges may be caused by plan upgrades, usage-based fees, taxes, or prorated adjustments. Review your invoice details in the billing section to see a breakdown of all charges. If something does not look correct or you need clarification, please contact support with the invoice number.",
+      "candidate_answer": "Unexpected charges may be caused by plan upgrades, usage-based fees, taxes, or prorated adjustments.",
+      "bertscore": {
+        "precision": 0.9047410488128662,
+        "recall": 0.37382757663726807,
+        "f1": 0.6272386312484741
+      }
+    },
+    {
+      "faq_id": "18",
+      "document_id": 1,
+      "question": "Does logging out sign me out of all devices?",
+      "reference_answer": "Logging out normally signs you out only from the current device or browser. If you want to log out of all active sessions, you can do so from the security or account settings section. This is recommended if you believe your account may have been accessed by someone else.",
+      "candidate_answer": "Logging out normally signs you out only from the current device or browser.",
+      "bertscore": {
+        "precision": 0.8172030448913574,
+        "recall": 0.2881070673465729,
+        "f1": 0.5406376123428345
+      }
+    },
+    {
+      "faq_id": "19",
+      "document_id": 1,
+      "question": "How can I enable or disable email notifications?",
+      "reference_answer": "Email notification preferences can be managed from your account settings. You can choose which types of emails you want to receive, such as billing updates, security alerts, or product announcements. Changes take effect immediately after saving your preferences.",
+      "candidate_answer": "You can manage email notification preferences from your account settings. You can choose which types of emails you want to receive, such as billing updates, security alerts, or product announcements. Changes take effect immediately after saving your preferences.",
+      "bertscore": {
+        "precision": 0.9239435791969299,
+        "recall": 0.9179804921150208,
+        "f1": 0.9210887551307678
+      }
+    },
+    {
+      "faq_id": "20",
+      "document_id": 1,
+      "question": "What information should I provide when contacting support?",
+      "reference_answer": "When contacting support, please include your account email address, a clear description of the issue, and any relevant error messages or screenshots if available. Providing details such as the time the issue occurred and the device or browser you are using can help us resolve your request more quickly.",
+      "candidate_answer": "When contacting support, please include your account email address, a clear description of the issue, and any relevant error messages or screenshots if available. Providing details such as the time the issue occurred and the device or browser you are using can help us resolve your request more quickly.",
+      "bertscore": {
+        "precision": 0.9999992847442627,
+        "recall": 0.9999992847442627,
+        "f1": 0.9999992847442627
+      }
+    }
+  ],
+  "summary": {
+    "avg_precision": 0.8932428359985352,
+    "avg_recall": 0.7007488012313843,
+    "avg_f1": 0.7936126589775085
+  }
+}
