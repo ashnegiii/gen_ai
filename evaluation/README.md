@@ -8,11 +8,22 @@ Before running the evaluation framework ensure the **backend** and **frontend** 
 
 2. Configure environment variables by copying `.env.example` and calling it `.env`
 
+3. Ensure that your `venv` is set to the one created for the app backend:
+
+```bash
+# Current location must be the project root directory
+
+# On Windows
+venv\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
+```
+
 3. Run the evaluation script:
 
 **Hint: Depending on your Python installation use either `python` or `python3` in the following command:**
 ```bash
-# current location must be the project root directory
+# Current location must be the project root directory
 python3 -m evaluation.evaluate_bertscore
 ```
 
