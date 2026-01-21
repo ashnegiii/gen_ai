@@ -19,7 +19,9 @@ def get_candidate_answer(base_url: str, question: str, document_id: int) -> str:
     """
     url = f"{base_url.rstrip('/')}/api/query"
     payload = {"query": question, "documentId": document_id, "chatHistory": []}
-    resp = requests.post(url, json=payload, timeout=600)
-    resp.raise_for_status()
+    resp = requests.post(url, json=payload, timeout=60)
+    if resp.status_code != 200:
+        print(f"The following error occurred: {resp.text}")
+        resp.raise_for_status()
     answer = resp.text.strip()
     return answer
