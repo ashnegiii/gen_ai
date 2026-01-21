@@ -45,7 +45,7 @@ def fetch_faqs(
     """
 
     sql_select = """
-        SELECT id, question_text, answer_text
+        SELECT id, document_id, question_text, answer_text
         FROM faqs
     """
     params = []
@@ -69,6 +69,7 @@ def fetch_faqs(
             rows = cur.fetchall()
 
     return [
-        {"faq_id": str(r[0]), "question": r[1], "reference_answer": r[2]}
+        {"faq_id": str(r[0]), "document_id": r[1],
+         "question": r[2], "reference_answer": r[3]}
         for r in rows
     ]
